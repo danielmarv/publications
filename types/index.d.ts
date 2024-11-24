@@ -74,3 +74,102 @@ declare interface ShareInputProps {
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onRemove: (email: string) => void;
 }
+
+// ============================== CREATE PUBLICATION
+declare interface CreatePublicationProps {
+  file: File;  // The file object (document, image, etc.) to be uploaded
+  title: string;  // The title of the publication
+  description: string;  // A brief description of the publication
+  ownerId: string;  // The ID of the user who owns the publication
+  path: string;  // The path for cache revalidation after creating the publication
+}
+
+
+// ============================== PUBLICATION RESPONSE
+declare interface Publication {
+  title: string;
+  description: string;
+  fileUrl: string;
+  fileName: string;
+  fileType: FileType;
+  fileSize: number;
+  owner: string;
+  bucketFileId: string;
+}
+
+// ============================== STORAGE FILE RESPONSE
+declare interface StorageFile {
+  $id: string;  // File ID in the storage
+  name: string;  // The name of the file
+  sizeOriginal: number;  // Original file size
+  $createdAt: string;  // Date when the file was created
+  $updatedAt: string;  // Date when the file was last updated
+}
+
+// ============================== PUBLICATION CREATION RESPONSE
+declare interface CreatePublicationResponse {
+  status: "success" | "error";  // Status of the publication creation
+  publication: Publication | null;  // The created publication or null if failed
+  errorMessage?: string;  // Optional error message if something went wrong
+}
+
+// ============================== FILE CREATION RESPONSE
+declare interface FileCreationResponse {
+  fileUrl: string;  // URL where the file can be accessed
+  fileName: string;  // Name of the file
+  fileType: FileType;  // Type of the file (document, image, etc.)
+  fileSize: number;  // Size of the file
+}
+
+// ============================== GET PUBLICATIONS
+declare interface GetPublicationsProps {
+  ownerId: string;
+  searchText?: string;
+  sort?: string;
+  limit?: number;
+}
+
+// ============================== UPDATE PUBLICATION
+declare interface UpdatePublicationProps {
+  publicationId: string;
+  updates: Partial<Publication>;
+  path: string;
+}
+
+// ============================== DELETE PUBLICATION
+declare interface DeletePublicationProps {
+  publicationId: string;
+  bucketFileId: string;
+  path: string;
+}
+
+// ============================== SPACE USAGE
+declare interface SpaceUsage {
+  usedSpace: number;
+  totalSpace: number;
+}
+
+declare interface CreateCommentProps {
+  publicationId: string;
+  commentText: string;
+  userId: string;
+  status: "approved" | "rejected" | "pending";
+}
+
+declare interface GetCommentsProps {
+  publicationId: string;
+  limit?: number;
+  sort?: string;
+}
+
+declare interface UpdateCommentStatusProps {
+  commentId: string;
+  status: "approved" | "rejected" | "pending";
+  newStatus: "pending" | "approved" | "rejected";
+}
+
+declare interface DeleteCommentProps {
+  commentId: string;
+  publicationId: string;
+  path
+}
