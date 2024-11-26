@@ -173,3 +173,31 @@ declare interface DeleteCommentProps {
   publicationId: string;
   path
 }
+
+
+declare interface CreateDepartmentProps {
+  name: string;
+  path: string;
+}
+
+declare interface UpdateDepartmentProps {
+  departmentId: string;
+  updates: {
+    name?: string;
+  };
+  path: string;
+}
+
+declare interface DeleteDepartmentProps {
+  departmentId: string;
+  path: string;
+}
+
+declare interface Department {
+  $id: string;
+  name: string;
+}
+
+declare interface DepartmentWithUsers extends Department {
+  users: { userId: string }[];
+}
