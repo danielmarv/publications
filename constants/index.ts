@@ -10,17 +10,22 @@ export const navItems = [
     url: "/documents",
   },
   {
-    name: "Images",
+    name: "Publications",
     icon: "/assets/icons/images.svg",
     url: "/images",
   },
   {
-    name: "Media",
+    name: "Comments",
     icon: "/assets/icons/video.svg",
     url: "/media",
   },
   {
-    name: "Others",
+    name: "Drafts",
+    icon: "/assets/icons/others.svg",
+    url: "/others",
+  },
+  {
+    name: "Write",
     icon: "/assets/icons/others.svg",
     url: "/others",
   },
