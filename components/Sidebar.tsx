@@ -35,7 +35,7 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
         />
       </Link>
 
-      <nav className="sidebar-nav">
+      <nav className="sidebar-nav max-h-[70%] overflow-auto scrollbar">
         <ul className="flex flex-1 flex-col gap-6">
           {navItems.map(({ url, name, icon }) => (
             <Link key={name} href={url} className="lg:w-full">
@@ -61,14 +61,6 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
           ))}
         </ul>
       </nav>
-
-      <Image
-        src="/assets/images/files-2.png"
-        alt="logo"
-        width={506}
-        height={418}
-        className="w-full"
-      />
 
       <div className="sidebar-user-info">
         <Image
