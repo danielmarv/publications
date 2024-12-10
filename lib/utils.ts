@@ -59,10 +59,18 @@ export const getFileType = (fileName: string) => {
     "xd",
     "sketch",
     "afdesign",
-    "afphoto",
-    "afphoto",
+    "PDF",
+    "PNG",
+    "JPG",
+    "JPEG",
+    "SVG",
+    "GIF",
+    "BMP",
+    "WEBP",
+    "MP4",
+    "AVI",
   ];
-  const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "svg", "webp"];
+  const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "svg", "webp", "tiff","JPEG","JPG","PNG","GIF","BMP","WEBP","TIFF", ];
   const videoExtensions = ["mp4", "avi", "mov", "mkv", "webm"];
   const audioExtensions = ["mp3", "wav", "ogg", "flac"];
 
