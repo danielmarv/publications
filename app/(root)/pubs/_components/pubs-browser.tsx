@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Card from "@/components/Card";
+import Card from "./pubs-card";
 import Image from "next/image";
 import { GridIcon, Loader2, RowsIcon } from "lucide-react";
 import { SearchBar } from "./search-bar";
@@ -20,21 +20,37 @@ import { getPublications } from "@/lib/actions/pubs.actions";  // Assuming corre
 
 function Placeholder() {
   return (
-    <div className="flex flex-col gap-8 w-full items-center mt-24">
+    <div className="flex flex-col justify-center items-center w-full h-full mt-6">
       <Image
         alt="an image of a picture and directory icon"
-        width="300"
-        height="300"
+        width="200"
+        height="200"
         src="/empty.svg"
       />
-      <div className="text-2xl">You have no publications, upload one now</div>
+      <div className="text-2xl mt-4 text-center">You have no publications, upload one now</div>
     </div>
   );
 }
 
+const dummyPublications = [
+  {
+    $id: "1",
+    $createdAt: "2024-01-01T12:00:00Z",
+    url: "https://example.com/publication1.pdf",
+    type: "pdf",
+    extension: "pdf",
+    name: "Sample Publication 1",
+    size: 102400, // 100 KB
+    owner: {
+      fullName: "John Doe",
+    },
+  },
+
+];
+
 export function PublicationBrowser() {
   const [isLoading, setIsLoading] = useState(true);
-  const [publications, setPublications] = useState([]);  // Changed to hold publications
+  const [publications, setPublications] = useState<Publication[]>([]); 
   const [query, setQuery] = useState("");  // Search query for publications
   const [type, setType] = useState("all");  // Type filter for file types
   const [title] = useState("Publications");  // Title of the page
@@ -119,10 +135,12 @@ export function PublicationBrowser() {
 
         <TabsContent value="grid">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4">
-            {filteredPublications.length > 0 ? (
-              filteredPublications.map((publication) => <Card key={publication.$id} file={publication} />)
+          {filteredPublications.length > 0 ? (
+              filteredPublications.map((publication) => (
+                <Card key={publication.$id} publication={publication} />
+              ))
             ) : (
-              <Placeholder />
+              isLoading
             )}
           </div>
         </TabsContent>
@@ -131,6 +149,7 @@ export function PublicationBrowser() {
           <DataTable columns={columns} data={filteredPublications} />
         </TabsContent>
       </Tabs>
+      {filteredPublications.length === 0 && !isLoading && <Placeholder />}
     </div>
   );
 }

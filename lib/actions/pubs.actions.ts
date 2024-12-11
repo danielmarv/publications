@@ -55,7 +55,7 @@ export const createPublication = async ({
     return parseStringify(newPublication);
   } catch (error) {
     handleError(error, "Failed to create publication");
-    return null;  
+    return null;
   }
 };
 
@@ -115,7 +115,7 @@ export const deletePublication = async ({
   publicationId,
   bucketFileId,
   path,
-}: DeletePublicationProps): Promise<{ status: string } | null> => {
+}: DeletePublicationProps): Promise<{ status: string } | boolean | undefined> => {
   const { databases, storage } = await createAdminClient();
 
   try {
@@ -132,8 +132,7 @@ export const deletePublication = async ({
     revalidatePath(path);
     return parseStringify({ status: "success" });
   } catch (error) {
-    handleError(error, "Failed to delete publication");
-    return null;  // Return null in case of error
+    handleError(error, "Failed to delete publication"); 
   }
 };
 
@@ -163,5 +162,126 @@ export const getPublicationsSpaceUsage = async (): Promise<SpaceUsage | null> =>
   } catch (error) {
     handleError(error, "Failed to calculate total space used by publications");
     return null;  
+  }
+};
+
+export const uploadPublication = async ({
+  file,
+  title,
+  description,
+  ownerId,
+  path,
+}: UploadPublicationProps): Promise<Publication | null> => {
+  const { storage, databases } = await createAdminClient();
+
+  try {
+    const inputFile = InputFile.fromBuffer(file, file.name);
+
+    const storageFile = await storage.createFile(
+      appwriteConfig.bucketId,
+      ID.unique(),
+      inputFile
+    );
+
+    const publication = {
+      title,
+      description,
+      fileUrl: constructFileUrl(storageFile.$id),
+      fileName: storageFile.name,
+      fileType: getFileType(storageFile.name).type,
+      fileSize: storageFile.sizeOriginal,
+      owner: ownerId,
+      bucketFileId: storageFile.$id,
+    };
+
+    const newPublication = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.publicationCollectionId,
+      ID.unique(),
+      publication
+    );
+
+    revalidatePath(path);
+    return parseStringify(newPublication);
+  } catch (error) {
+    handleError(error, "Failed to create publication");
+    return null;  
+  }
+};
+
+// ============================== UPDATE PUBLICATION USERS
+export const updatePublicationUsers = async ({
+  publicationId,
+  emails,
+  path,
+}: UpdatePublicationProps & { emails: string[] }): Promise<Publication | null> => {
+  const { databases } = await createAdminClient();
+
+  try {
+    const updatedPublication = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.publicationCollectionId,
+      publicationId,
+      {
+        users: emails,
+      },
+    );
+
+    revalidatePath(path);
+    return parseStringify(updatedPublication);
+  } catch (error) {
+    handleError(error, "Failed to update publication users");
+    return null;  // Return null in case of error
+  }
+};
+
+// ============================== RENAME PUBLICATION
+export const renamePublication = async ({
+  publicationId,
+  newTitle,
+  path,
+}: RenamePublicationProps): Promise<Publication | null> => {
+  const { databases } = await createAdminClient();
+
+  try {
+    const updatedPublication = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.publicationCollectionId,
+      publicationId,
+      {
+        title: newTitle,
+      },
+    );
+
+    revalidatePath(path);
+    return parseStringify(updatedPublication);
+  } catch (error) {
+    handleError(error, "Failed to rename publication");
+    return null;  // Return null in case of error
+  }
+};
+
+export const sharePublication = async ({
+  publicationId,
+  emails,
+  path,
+}: SharePublicationProps): Promise<Publication | null> => {
+  const { databases } = await createAdminClient();
+
+  try {
+    const updatedPublication = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.publicationCollectionId,
+      publicationId,
+      {
+        users: emails,
+      },
+    );
+
+    revalidatePath(path);
+    return parseStringify(updatedPublication);
+  } catch (error) {
+    handleError(error, "Failed to share publication");
+    return null;  // Return null in case of error
   }
 };
