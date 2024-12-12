@@ -1,6 +1,6 @@
 "use server";
 
-import { createAdminClient, createSessionClient } from "@/lib/appwrite";
+import {createAdminClient, createSessionClient } from "@/lib/appwrite";
 import { InputFile } from "node-appwrite/file";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { ID, Models, Query } from "node-appwrite";
@@ -40,6 +40,7 @@ export const uploadFile = async ({
       accountId,
       users: [],
       bucketFileId: bucketFile.$id,
+      publication: null,
     };
 
     const newFile = await databases

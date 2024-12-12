@@ -87,6 +87,7 @@ declare interface CreatePublicationProps {
 
 // ============================== PUBLICATION RESPONSE
 declare interface Publication {
+  $id: string;
   title: string;
   description: string;
   fileUrl: string;
@@ -172,4 +173,60 @@ declare interface DeleteCommentProps {
   commentId: string;
   publicationId: string;
   path
+}
+
+
+declare interface CreateDepartmentProps {
+  name: string;
+  path: string;
+}
+
+declare interface UpdateDepartmentProps {
+  departmentId: string;
+  updates: {
+    name?: string;
+  };
+  path: string;
+}
+
+declare interface DeleteDepartmentProps {
+  departmentId: string;
+  path: string;
+}
+
+declare interface Department {
+  $id: string;
+  name: string;
+}
+
+declare interface DepartmentWithUsers extends Department {
+  users: { userId: string }[];
+}
+
+declare interface UploadPublicationProps {
+  file: File;
+  title: string;
+  description: string;
+  ownerId: string;
+  emails: string;
+  path: string;
+}
+ declare interface RenamePublicationProps {
+  publicationId: string;
+  newTitle: string;
+  path: string;
+}
+
+interface SharePublicationProps {
+  publication: Publication; 
+  emails: string[]; // Array of emails to share the publication with
+  onEmailChange: (emails: string[]) => void; // Callback for when the list of emails changes
+  onRemoveEmail: (email: string) => void; // Callback for removing an email
+}
+
+declare interface SharePublicationInputProps {
+  publication: Publication; 
+  emails: string[]; // Array of emails to share the publication with
+  onEmailChange: (emails: string[]) => void; // Callback for when the list of emails changes
+  onRemoveEmail: (email: string) => void; // Callback for removing an email
 }
