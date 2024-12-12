@@ -96,6 +96,7 @@ declare interface Publication {
   fileSize: number;
   owner: string;
   bucketFileId: string;
+  citationCount: number;
 }
 
 // ============================== STORAGE FILE RESPONSE
