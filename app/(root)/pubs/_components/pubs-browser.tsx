@@ -16,7 +16,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { getPublications } from "@/lib/actions/pubs.actions";  // Assuming correct imports
+import { getPublications } from "@/lib/actions/pubs.actions";
+import { Button } from "@/components/ui/button";
 
 function Placeholder() {
   return (
@@ -28,25 +29,14 @@ function Placeholder() {
         src="/empty.svg"
       />
       <div className="text-2xl mt-4 text-center">You have no publications, upload one now</div>
+      <Button
+      className="h4 h-[52px] items-center justify-center gap-4 lg:justify-center lg:w-[200px] lg:px-[30px] lg:rounded-full rounded-xl bg-red text-white hover:bg-amber-50 hover:text-black "
+      >
+        Write
+      </Button>
     </div>
   );
 }
-
-const dummyPublications = [
-  {
-    $id: "1",
-    $createdAt: "2024-01-01T12:00:00Z",
-    url: "https://example.com/publication1.pdf",
-    type: "pdf",
-    extension: "pdf",
-    name: "Sample Publication 1",
-    size: 102400, // 100 KB
-    owner: {
-      fullName: "John Doe",
-    },
-  },
-
-];
 
 export function PublicationBrowser() {
   const [isLoading, setIsLoading] = useState(true);
@@ -58,7 +48,7 @@ export function PublicationBrowser() {
   useEffect(() => {
     const fetchPublications = async () => {
       try {
-        const ownerId = "some-owner-id"; // Replace with actual owner ID
+        const ownerId = "some-owner-id";
         const fetchedPublications = await getPublications({ ownerId, searchText: query, limit: 10 });
         setPublications(fetchedPublications || []);
       } catch (error) {
