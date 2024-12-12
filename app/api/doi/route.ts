@@ -1,4 +1,3 @@
-import { Client, Databases } from 'node-appwrite';
 import { appwriteConfig } from '@/lib/appwrite/config';
 import { revalidatePath } from 'next/cache';
 import { createAdminClient } from '@/lib/appwrite';
@@ -6,8 +5,12 @@ import { createAdminClient } from '@/lib/appwrite';
 
 export const fetchPublication = async (publicationId: string) => {
   try {
-    const { databases } = await createAdminClient(); // Admin access for reading the publication
-    const publication = await databases.getDocument(appwriteConfig.databaseId, appwriteConfig.publicationCollectionId, publicationId);
+    const { databases } = await createAdminClient();
+    const publication = await databases.getDocument(
+        appwriteConfig.databaseId, 
+        appwriteConfig.publicationCollectionId,
+         publicationId
+    );
     return publication;
   } catch (error) {
     console.error("Error fetching publication", error);
@@ -22,9 +25,9 @@ export const updatePublicationCitationCount = async (publicationId: string, path
       appwriteConfig.databaseId,
       appwriteConfig.publicationCollectionId,
       publicationId,
-      { citationCount: new Date().getFullYear() + 1 } // Example: incrementing citation count
+      { citationCount: new Date().getFullYear() + 1 }
     );
-    revalidatePath(path); // Revalidate paths if needed
+    revalidatePath(path);
     return updatedPublication;
   } catch (error) {
     console.error("Error updating publication", error);
