@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
 
   return (
     <footer className={`${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
-      <div className="mx-auto w-full max-w-screen-xl">
+      <div className="mx-auto w-full p-8">
         <div className="grid grid-cols-2 gap-8 px-4 py-6 lg:py-8 md:grid-cols-4">
           {/* Company Section */}
           <div>
