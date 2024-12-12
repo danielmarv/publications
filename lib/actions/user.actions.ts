@@ -8,7 +8,7 @@ import { cookies } from "next/headers";
 import { avatarPlaceholderUrl } from "@/constants";
 import { redirect } from "next/navigation";
 
-const getUserByEmail = async (email: string) => {
+export const getUserByEmail = async (email: string) => {
   const { databases } = await createAdminClient();
 
   const result = await databases.listDocuments(
@@ -141,3 +141,27 @@ export const signInUser = async ({ email }: { email: string }) => {
     handleError(error, "Failed to sign in user");
   }
 };
+
+export const getUsers = async () => {
+  const { databases } = await createAdminClient();
+
+  const result = await databases.listDocuments(
+    appwriteConfig.databaseId,
+    appwriteConfig.usersCollectionId,
+  );
+
+  return result.documents;
+};
+
+// // Fetch user by email
+// export const getUserForSMTP = async (email: string): Promise<User | null> => {
+//   const { databases } = await createAdminClient();// Replace with your users collection ID
+
+//   try {
+//     const user = await databases.getDocument<User>(, email);
+//     return user;
+//   } catch (error) {
+//     console.log(error);
+//     return null;
+//   }
+// };

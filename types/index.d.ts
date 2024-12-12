@@ -231,3 +231,10 @@ declare interface SharePublicationInputProps {
   onEmailChange: (emails: string[]) => void; // Callback for when the list of emails changes
   onRemoveEmail: (email: string) => void; // Callback for removing an email
 }
+
+declare interface User {
+  fullName: string;
+  email: string;
+  avatar: string;
+  accountId: string;
+}
