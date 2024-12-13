@@ -1,4 +1,3 @@
-"use server";
 import { createAdminClient } from "@/lib/appwrite";
 import { fetchPublication } from "@/app/api/doi/route";
 import { getUserByEmail } from "@/lib/actions/user.actions";

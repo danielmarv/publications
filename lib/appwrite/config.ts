@@ -11,4 +11,8 @@ export const appwriteConfig = {
   citationCollectionId: process.env.NEXT_PUBLIC_APPWRITE_CITATION_COLLECTION!,
   bucketId: process.env.NEXT_PUBLIC_APPWRITE_BUCKET!,
   secretKey: process.env.NEXT_APPWRITE_SECRET!,
+  newsID: process.env.NEXT_PUBLIC_APPWRITE_NEWS_TOPIC!,
+  updatesID: process.env.NEXT_PUBLIC_APPWRITE_UPDATES_TOPIC!,
+  notificationID: process.env.NEXT_PUBLIC_APPWRITE_NOTIFICATION_TOPIC!,
+  mainID: process.env.NEXT_PUBLIC_APPWRITE_MAIN_TOPIC!,
 };
