@@ -129,8 +129,6 @@ export const signOutUser = async () => {
 export const signInUser = async ({ email }: { email: string }) => {
   try {
     const existingUser = await getUserByEmail(email);
-
-    // User exists, send OTP
     if (existingUser) {
       await sendEmailOTP({ email });
       return parseStringify({ accountId: existingUser.accountId });
@@ -153,15 +151,3 @@ export const getUsers = async () => {
   return result.documents;
 };
 
-// // Fetch user by email
-// export const getUserForSMTP = async (email: string): Promise<User | null> => {
-//   const { databases } = await createAdminClient();// Replace with your users collection ID
-
-//   try {
-//     const user = await databases.getDocument<User>(, email);
-//     return user;
-//   } catch (error) {
-//     console.log(error);
-//     return null;
-//   }
-// };
