@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Card from "@/components/Card";
+import Card from "./pubs-card";
 import Image from "next/image";
 import { GridIcon, Loader2, RowsIcon } from "lucide-react";
 import { SearchBar } from "./search-bar";
@@ -16,25 +16,31 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { getPublications } from "@/lib/actions/pubs.actions";  // Assuming correct imports
+import { getPublications } from "@/lib/actions/pubs.actions";
+import { Button } from "@/components/ui/button";
 
 function Placeholder() {
   return (
-    <div className="flex flex-col gap-8 w-full items-center mt-24">
+    <div className="flex flex-col justify-center items-center w-full h-full mt-6">
       <Image
         alt="an image of a picture and directory icon"
-        width="300"
-        height="300"
+        width="200"
+        height="200"
         src="/empty.svg"
       />
-      <div className="text-2xl">You have no publications, upload one now</div>
+      <div className="text-2xl mt-4 text-center">You have no publications, upload one now</div>
+      <Button
+      className="h4 h-[52px] items-center justify-center gap-4 lg:justify-center lg:w-[200px] lg:px-[30px] lg:rounded-full rounded-xl bg-red text-white hover:bg-amber-50 hover:text-black "
+      >
+        Write
+      </Button>
     </div>
   );
 }
 
 export function PublicationBrowser() {
   const [isLoading, setIsLoading] = useState(true);
-  const [publications, setPublications] = useState([]);  // Changed to hold publications
+  const [publications, setPublications] = useState<Publication[]>([]); 
   const [query, setQuery] = useState("");  // Search query for publications
   const [type, setType] = useState("all");  // Type filter for file types
   const [title] = useState("Publications");  // Title of the page
@@ -42,7 +48,7 @@ export function PublicationBrowser() {
   useEffect(() => {
     const fetchPublications = async () => {
       try {
-        const ownerId = "some-owner-id"; // Replace with actual owner ID
+        const ownerId = "some-owner-id";
         const fetchedPublications = await getPublications({ ownerId, searchText: query, limit: 10 });
         setPublications(fetchedPublications || []);
       } catch (error) {
@@ -119,10 +125,12 @@ export function PublicationBrowser() {
 
         <TabsContent value="grid">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4">
-            {filteredPublications.length > 0 ? (
-              filteredPublications.map((publication) => <Card key={publication.$id} file={publication} />)
+          {filteredPublications.length > 0 ? (
+              filteredPublications.map((publication) => (
+                <Card key={publication.$id} publication={publication} />
+              ))
             ) : (
-              <Placeholder />
+              isLoading
             )}
           </div>
         </TabsContent>
@@ -131,6 +139,7 @@ export function PublicationBrowser() {
           <DataTable columns={columns} data={filteredPublications} />
         </TabsContent>
       </Tabs>
+      {filteredPublications.length === 0 && !isLoading && <Placeholder />}
     </div>
   );
 }
