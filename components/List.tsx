@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "./ui/button";
+import { kMaxLength } from "buffer";
 
 type Publication = {
   title: string;
@@ -16,6 +17,9 @@ type Publication = {
 interface PublicationListProps {
   publications: Publication[];
 }
+const truncateString = (text: string, maxLength: number): string => {
+  return text.length > maxLength ? text.slice(0, maxLength) + " . . ." : text;
+};
 
 const PublicationList: React.FC<PublicationListProps> = ({ publications }) => {
   return (
@@ -44,7 +48,7 @@ const PublicationList: React.FC<PublicationListProps> = ({ publications }) => {
               </p>
 
               {pub.description && (
-                <p className="text-sm max-w-[800px] text-gray-700 mb-2">{pub.description}</p>
+                <p className="text-sm max-w-[800px] text-gray-700 hover:cursor-pointer mb-2">{truncateString(pub.description, 225)}</p>
               )}
 
               {pub.source && (
