@@ -12,7 +12,7 @@ export const navItems = [
   {
     name: "Publications",
     icon: "/assets/icons/images.svg",
-    url: "/images",
+    url: "/pubs",
   },
   {
     name: "Comments",
