@@ -17,6 +17,7 @@ export const columns: ColumnDef<any, any>[] = [
           onClick={() => handleDelete(info.row.original)}>
           Delete
         </button>
+        
       </div>
     ),
   },
@@ -25,3 +26,4 @@ export const columns: ColumnDef<any, any>[] = [
 const handleDelete = (file) => {
   console.log("Deleting file:", file.title);
 };
+
