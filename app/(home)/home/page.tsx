@@ -1,11 +1,24 @@
-import React from "react";
+import React from 'react';
+// import NewsletterSubscription from '../_components/Newsletter';
+// import { getCurrentUser } from '@/lib/actions/user.actions';
+import PublicationList from '@/components/List';
+import { publications } from "@/data/publications";
 
-const HomePage = () => {
+const HomePage = async () => {
+  // const currentUser = await getCurrentUser();
+
   return (
-    <div>
-      <h2 className="text-xl font-semibold">Welcome to My App</h2>
-      <p>This is the homepage content.</p>
-      </div>
+    <div className="w-full px-5">
+      <PublicationList publications={publications} />
+      
+      {/* {currentUser  === undefined ? (
+        <p>Loading...</p>
+      ) : currentUser  ? (
+        <NewsletterSubscription />
+      ) : (
+        <p>Please log in to subscribe to our newsletter.</p>
+      )} */}
+    </div>
   );
 };
 

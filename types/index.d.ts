@@ -96,6 +96,7 @@ declare interface Publication {
   fileSize: number;
   owner: string;
   bucketFileId: string;
+  citationCount: number;
 }
 
 // ============================== STORAGE FILE RESPONSE
@@ -229,4 +230,11 @@ declare interface SharePublicationInputProps {
   emails: string[]; // Array of emails to share the publication with
   onEmailChange: (emails: string[]) => void; // Callback for when the list of emails changes
   onRemoveEmail: (email: string) => void; // Callback for removing an email
+}
+
+declare interface User {
+  fullName: string;
+  email: string;
+  avatar: string;
+  accountId: string;
 }
