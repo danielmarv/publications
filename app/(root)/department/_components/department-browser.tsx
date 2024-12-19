@@ -7,6 +7,7 @@ import { SearchBar } from "./search-bar";
 import { DataTable } from "./deps-table";
 import { columns } from "./column";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CreateDepartmentDialog from "./modal";
 // import {
 //   Select,
 //   SelectContent,
@@ -18,7 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getDepartments } from "@/lib/actions/department.actions";
 import { Button } from "@/components/ui/button";
 
-function Placeholder() {
+function Placeholder({ onCreate }: { onCreate: () => void }) {
   return (
     <div className="flex flex-col justify-center items-center w-full h-full mt-6">
       <Image
@@ -27,11 +28,12 @@ function Placeholder() {
         height="200"
         src="/empty.svg"
       />
-      <div className="text-2xl mt-4 text-center">You have no publications, upload one now</div>
+      <div className="text-2xl mt-4 text-center">You have no Department, create one now</div>
       <Button
+      onClick={onCreate}
       className="h4 h-[52px] items-center justify-center gap-4 lg:justify-center lg:w-[200px] lg:px-[30px] lg:rounded-full rounded-xl bg-red text-white hover:bg-amber-50 hover:text-black "
       >
-        Write
+        Create
       </Button>
     </div>
   );
@@ -42,6 +44,7 @@ export function DepartmentBrowser() {
   const [departments, setDepartments] = useState<Department[]>([]); 
   const [query, setQuery] = useState("");
   const [title] = useState("Departments");
+  const [isDialogOpen, setIsDialogOpen] = useState(false); 
 
   useEffect(() => {
     const fetchDepartments = async () => {
@@ -65,11 +68,23 @@ export function DepartmentBrowser() {
       <div className="hidden md:flex justify-between items-center mb-8">
         <h1 className="text-4xl font-bold">{title}</h1>
         <SearchBar query={query} setQuery={setQuery} />
+        <Button
+          onClick={() => setIsDialogOpen(true)}
+          className="h4 h-[52px] items-center justify-center gap-4 lg:justify-center lg:w-[200px] lg:px-[30px] lg:rounded-full rounded-xl bg-red text-white hover:bg-amber-50 hover:text-black "
+        >
+            Create
+        </Button>
       </div>
 
       <div className="md:hidden flex flex-col gap-5 mb-8">
         <h1 className="text-4xl font-bold">{title}</h1>
         <SearchBar query={query} setQuery={setQuery} />
+        <Button
+            onClick={() => setIsDialogOpen(true)}
+          className="h4  items-center justify-center gap-4 lg:justify-center lg:w-[100px] lg:px-[20px] lg:rounded-full rounded-xl bg-red text-white hover:bg-amber-50 hover:text-black "
+        >
+            Create
+        </Button>
       </div>
 
       <Tabs defaultValue="table">
@@ -118,7 +133,10 @@ export function DepartmentBrowser() {
           <DataTable columns={columns} data={departments} />
         </TabsContent>
       </Tabs>
-      {departments.length === 0 && !isLoading && <Placeholder />}
+      {departments.length === 0 && !isLoading && (
+        <Placeholder onCreate={() => setIsDialogOpen(true)} />
+      )}
+      <CreateDepartmentDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} />
     </div>
   );
 }

@@ -186,7 +186,6 @@ declare interface DeleteCommentProps {
 
 declare interface CreateDepartmentProps {
   department: string;
-  path: string;
 }
 
 declare interface UpdateDepartmentProps {

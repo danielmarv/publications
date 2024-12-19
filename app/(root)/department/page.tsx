@@ -1,4 +1,4 @@
-import {DepartmentBrowser} from './_components/department-browser';
+import { DepartmentBrowser } from './_components/department-browser';
 
 export default function DepartmentPage() {
   return (

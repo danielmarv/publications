@@ -1,18 +1,23 @@
-import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
-import { createDepartment } from "@/lib/actions/department.actions";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/router";
+"use client";
 
-const CreateDepartmentForm = () => {
+import { useState } from "react";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { createDepartment } from "@/lib/actions/department.actions";
+import Image from "next/image";
+
+interface CreateDepartmentDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const CreateDepartmentDialog: React.FC<CreateDepartmentDialogProps> = ({ isOpen, onClose }) => {
   const [departmentName, setDepartmentName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleCreate = async () => {
     if (!departmentName.trim()) {
       setError("Department name is required");
       return;
@@ -22,46 +27,57 @@ const CreateDepartmentForm = () => {
     setError(null);
 
     try {
-      const path = router.asPath;
-      const newDepartment = await createDepartment({ name: departmentName, path });
+      const newDepartment = await createDepartment({ department: departmentName });
 
       if (newDepartment) {
-        setDepartmentName("");
         alert("Department created successfully!");
-        router.replace(router.asPath);
+        setDepartmentName("");
+        onClose(); // Close the dialog
       }
-    } catch (error) {
+    } catch (err) {
+      console.error("Error creating department:", err);
       setError("Failed to create department. Please try again.");
-      console.error("Error creating department:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <>
-      <div className="share-wrapper">
-        <p className="subtitle-2 pl-1 text-light-100">Create a new department</p>
-        <Input
-          type="text"
-          placeholder="Enter department name"
-          value={departmentName}
-          onChange={(e) => setDepartmentName(e.target.value)}
-          className="share-input-field"
-        />
-        <div className="pt-4">
-          <Button
-            onClick={handleSubmit}
-            disabled={isLoading}
-            className="share-button"
-          >
-            {isLoading ? "Creating..." : "Create Department"}
-          </Button>
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="shad-dialog button">
+        <DialogHeader>
+          <DialogTitle>Create Department</DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col gap-4">
+          <Input
+            type="text"
+            placeholder="Enter department name"
+            value={departmentName}
+            onChange={(e) => setDepartmentName(e.target.value)}
+          />
+          {error && <p className="text-red-500 text-sm">{error}</p>}
         </div>
-      </div>
-    </>
+        <DialogFooter className="flex flex-col gap-3 md:flex-row">
+          <Button onClick={onClose} className="modal-cancel-button">
+            Cancel
+          </Button>
+          <Button onClick={handleCreate} disabled={isLoading} className="modal-submit-button">
+            {isLoading ? (
+              <Image
+                src="/assets/icons/loader.svg"
+                alt="loader"
+                width={24}
+                height={24}
+                className="animate-spin"
+              />
+            ) : (
+              "Create"
+            )}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
-export default CreateDepartmentForm;
+export default CreateDepartmentDialog;

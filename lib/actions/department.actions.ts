@@ -13,8 +13,7 @@ const handleError = (error: unknown, message: string) => {
 
 // ============================== CREATE DEPARTMENT
 export const createDepartment = async ({
-  name,
-  path,
+  department,
 }: CreateDepartmentProps) => {
   const { databases } = await createAdminClient();
 
@@ -23,10 +22,9 @@ export const createDepartment = async ({
       appwriteConfig.databaseId,
       appwriteConfig.departmentCollectionId,
       ID.unique(),
-      { name }
+      { department }
     );
 
-    revalidatePath(path);
     return newDepartment;
   } catch (error) {
     handleError(error, "Failed to create department");
