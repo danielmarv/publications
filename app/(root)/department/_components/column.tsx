@@ -13,7 +13,7 @@ export const columns: ColumnDef<any, any>[] = [
     cell: (info) => (
       <div className="flex">
         <button
-          className="bg-red-500 text-black py-1 px-2 rounded"
+          className="bg-rose-600 transition-colors  text-white py-1 px-2 rounded-sm"
           onClick={() => handleDelete(info.row.original)}>
           Delete
         </button>
