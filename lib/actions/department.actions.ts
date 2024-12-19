@@ -51,7 +51,7 @@ export const getDepartments = async ({
 
     const departments = await databases.listDocuments(
       appwriteConfig.databaseId,
-      appwriteConfig.departmentCollectionId, // Replace with your collection ID
+      appwriteConfig.departmentCollectionId,
       queries
     );
 
