@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
-import { createDepartment } from "@/lib/actions/department.actions"; // Assuming your createDepartment function is here
-import { Button } from "@/components/ui/button"; // Replace with your button component
+import { createDepartment } from "@/lib/actions/department.actions";
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 
 const CreateDepartmentForm = () => {
@@ -22,18 +22,17 @@ const CreateDepartmentForm = () => {
     setError(null);
 
     try {
-      const path = router.asPath; // Pass the current path for revalidation
+      const path = router.asPath;
       const newDepartment = await createDepartment({ name: departmentName, path });
 
       if (newDepartment) {
         setDepartmentName("");
         alert("Department created successfully!");
-        // Re-render the page to fetch updated data
         router.replace(router.asPath);
       }
     } catch (error) {
       setError("Failed to create department. Please try again.");
-      console.error("Error creating department:", error); // Use `err` to log the error
+      console.error("Error creating department:", error);
     } finally {
       setIsLoading(false);
     }

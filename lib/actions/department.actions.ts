@@ -35,19 +35,33 @@ export const createDepartment = async ({
 };
 
 // ============================== GET DEPARTMENTS
-export const getDepartments = async () => {
+export const getDepartments = async ({
+  searchText = "",
+  sort = "$createdAt-desc",
+  limit,
+}: GetDepartmentsProps): Promise<Department[]> => {
   const { databases } = await createAdminClient();
 
   try {
+    const queries = [
+      ...(searchText ? [Query.search("name", searchText)] : []),
+      ...(limit ? [Query.limit(limit)] : []),
+      Query.orderDesc(sort.split("-")[0]),
+    ];
+
     const departments = await databases.listDocuments(
       appwriteConfig.databaseId,
-      appwriteConfig.departmentCollectionId
+      appwriteConfig.departmentCollectionId, // Replace with your collection ID
+      queries
     );
 
-    return departments.documents;
+    return departments.documents.map((doc) => ({
+      $id: doc.$id,
+      department: doc.department || "Unnamed Department",
+    }));
   } catch (error) {
     handleError(error, "Failed to fetch departments");
-    return null;
+    return [];
   }
 };
 

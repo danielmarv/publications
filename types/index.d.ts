@@ -25,6 +25,13 @@ declare interface GetFilesProps {
   sort?: string;
   limit?: number;
 }
+
+declare interface GetDepartmentsProps {
+  searchText?: string;
+  sort?: string;
+  limit?: number;
+}
+
 declare interface RenameFileProps {
   fileId: string;
   name: string;
@@ -178,14 +185,14 @@ declare interface DeleteCommentProps {
 
 
 declare interface CreateDepartmentProps {
-  name: string;
+  department: string;
   path: string;
 }
 
 declare interface UpdateDepartmentProps {
   departmentId: string;
   updates: {
-    name?: string;
+    department?: string;
   };
   path: string;
 }
@@ -197,7 +204,7 @@ declare interface DeleteDepartmentProps {
 
 declare interface Department {
   $id: string;
-  name: string;
+  department: string;
 }
 
 declare interface DepartmentWithUsers extends Department {

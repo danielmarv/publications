@@ -1,11 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
-// Define the columns for the table
 export const columns: ColumnDef<any, any>[] = [
   {
     header: "File Name",
-    accessorKey: "title", // The key in the file data that represents the file name
+    accessorKey: "title", 
     cell: (info) => (
       <a href={info.row.original.url} target="_blank" rel="noopener noreferrer">
         {info.getValue()}
@@ -14,12 +13,12 @@ export const columns: ColumnDef<any, any>[] = [
   },
   {
     header: "File Type",
-    accessorKey: "type", // The key in the file data that represents the file type (e.g., image, pdf)
+    accessorKey: "type",
     cell: (info) => info.getValue(),
   },
   {
     header: "Upload Date",
-    accessorKey: "createdAt", // The key in the file data that represents the file upload date
+    accessorKey: "createdAt",
     cell: (info) => {
       const date = new Date(info.getValue());
       return format(date, "yyyy-MM-dd HH:mm");
@@ -27,7 +26,7 @@ export const columns: ColumnDef<any, any>[] = [
   },
   {
     header: "Favorites",
-    accessorKey: "isFavorited", // Assuming this is a boolean field that indicates if the file is marked as a favorite
+    accessorKey: "isFavorited",
     cell: (info) => (info.getValue() ? "⭐" : "☆"),
   },
   {
@@ -50,7 +49,6 @@ export const columns: ColumnDef<any, any>[] = [
   },
 ];
 
-// Example handlers for "Download" and "Delete" buttons
 const handleDownload = (file) => {
   console.log("Downloading file:", file.title);
 };
