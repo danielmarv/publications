@@ -6,17 +6,15 @@ import { getCurrentUser } from '@/lib/actions/user.actions';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
 const MyProfilePage = () => {
-  // State to store user data
   const [user, setUser] = useState<any>(null);
 
   // Fetch user data on component mount
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const fetchedUser = await getCurrentUser(); // Fetch the current user session
-        console.log(fetchedUser)
-        
-        setUser(fetchedUser); // Update state with user data
+        const fetchedUser = await getCurrentUser();
+
+        setUser(fetchedUser);
       } catch (error) {
         console.error("No active session", error);
       }

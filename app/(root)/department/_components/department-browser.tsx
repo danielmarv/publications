@@ -59,7 +59,6 @@ export function DepartmentBrowser() {
     };
   
     fetchDepartments();
-    console.log(departments);
   }, [query]);
 
 
