@@ -8,7 +8,6 @@ import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 const MyProfilePage = () => {
   const [user, setUser] = useState<any>(null);
 
-  // Fetch user data on component mount
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -22,9 +21,7 @@ const MyProfilePage = () => {
 
     fetchUser();
   }, []);
-//   const firstfile= user.files[0]
 
-  // Render the profile page
   return (
     <div className="bg-white shadow rounded-lg p-6 bg-gray-400">
       {user ? (
@@ -78,7 +75,7 @@ const MyProfilePage = () => {
             <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
               <div className="sm:col-span-1">
                 <dt className="text-sm font-medium text-gray-500">Department</dt>
-                <div className="mt-1 text-sm text-gray-900">{user.department || "N/A"}</div>
+                <div className="mt-1 text-sm text-gray-900">{user.department.department || "N/A"}</div>
               </div>
               <div className="sm:col-span-1">
                 <dt className="text-sm font-medium text-gray-500">Role</dt>
