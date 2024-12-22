@@ -244,3 +244,10 @@ declare interface User {
   avatar: string;
   accountId: string;
 }
+
+declare interface UpdateUserData {
+      fullName: string;
+      email: string;
+      avatar: string;
+      accountId: string;
+    }
