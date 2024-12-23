@@ -1,6 +1,6 @@
 export const publications = [
   {
-    title: "Where's the AI?",
+    title: "WherestheAI",
     authors: "RC Schank",
     year: 1991,
     description:

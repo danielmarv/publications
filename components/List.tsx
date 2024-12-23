@@ -1,6 +1,8 @@
 import React from "react";
 import { Button } from "./ui/button";
 import { kMaxLength } from "buffer";
+import Link from "next/link";
+
 
 type Publication = {
   title: string;
@@ -49,7 +51,9 @@ const PublicationList: React.FC<PublicationListProps> = ({ publications }) => {
               </p>
 
               {pub.description && (
-                <p className="text-sm max-w-[800px] md:max-w-[800px] text-gray-700 hover:cursor-pointer mb-2">{truncateString(pub.description, 225)}</p>
+                <Link href={`home/${pub.title}`}>
+                <p className="text-sm max-w-[800px] text-gray-700 hover:cursor-pointer mb-2">{truncateString(pub.description, 225)}</p>
+                </Link>
 
               )}
 
