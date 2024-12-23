@@ -1,13 +1,15 @@
-"use client";
-
-import React, { useEffect, useState } from 'react';
+"use client"
+import React, { useEffect, useState,useRef } from 'react';
 import Image from 'next/image';
 import { getCurrentUser } from '@/lib/actions/user.actions';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
+import {updateProfile} from '@/lib/actions/user.actions';
+import { Grid } from 'react-loader-spinner'
 
 const MyProfilePage = () => {
   // State to store user data
   const [user, setUser] = useState<any>(null);
+  const [loading, setloading] = useState(false);
 
   // Fetch user data on component mount
   useEffect(() => {
@@ -20,28 +22,60 @@ const MyProfilePage = () => {
       } catch (error) {
         console.error("No active session", error);
       }
+      return 
     };
 
     fetchUser();
   }, []);
+
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleButtonClick = () => {
+    fileInputRef.current?.click()
+  }
+
+ 
+
+  const handleFileChange =async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      setloading(true) 
+      console.log(file)
+      updateProfile(file) 
+      setTimeout(() => {
+            window.location.reload(); // Reload after 2 seconds
+          }, 7000);
+      // setloading(false)
+     };
+      }
+      
+      // You can add your image upload logic here
 //   const firstfile= user.files[0]
 
   // Render the profile page
   return (
-    <div className="bg-white shadow rounded-lg p-6 bg-gray-400">
+    <div className="bg-white shadow rounded-lg p-6">
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        accept="image/*"
+        style={{ display: 'none' }}
+      />
       {user ? (
             
         <div className="md:flex flex flex-col ">
             <div className=' flex  mb-5 gap-[40%]'>
                   <div className='flex flex-col'>
                   <Image
+                  key={user.avatar}
                         src={user.avatar || "/default-avatar.png"} // Fallback for avatar
                         alt={`${user.fullName}'s avatar`}
-                        width={128}
+                        width={138}
                         height={128}
-                        className=" flex rounded-full hover:cursor-pointer"
+                        className=" flex rounded-full "
                   />
-                  <button className='flex font-bold bg-red rounded-lg px-3 ml-5 my-4 cursor-pointer'> Update</button>
+                  <button onClick={handleButtonClick}  className='flex font-bold bg-red rounded-lg px-3 ml-5 my-4 cursor-pointer'> Update</button>
                   </div>
 
                   <div className='flex  flex-col gap-4 mx-3'>
@@ -60,7 +94,7 @@ const MyProfilePage = () => {
                         alt={file.name}
                         width={100}
                         height={100}
-                        className=" flex rounded-lg mx-2  my-1 hover:cursor-pointer"
+                        className=" flex rounded-lg mx-2  my-1 "
                          />                              
                         </div>
                         ))}
@@ -71,6 +105,16 @@ const MyProfilePage = () => {
                   
                   
             </div>
+            {loading && <><Grid
+                                visible={true}
+                                height="80"
+                                width="80"
+                                color="#4fa94d"
+                                ariaLabel="grid-loading"
+                                radius="12.5"
+                                wrapperStyle={{}}
+                                wrapperClass="grid-wrapper" /></>}
+
           <h2 className="mt-4 mb-3 text-xl font-semibold text-gray-900">{user.fullName.toUpperCase()}</h2>
           <p className="text-gray-900">{user.email}</p>
          
@@ -80,7 +124,12 @@ const MyProfilePage = () => {
             <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
               <div className="sm:col-span-1">
                 <dt className="text-sm font-medium text-gray-500">Department</dt>
-                <div className="mt-1 text-sm text-gray-900">{user.department || "N/A"}</div>
+                {user.department ? (
+                <div className="mt-1 text-sm text-gray-900">{user.department.department || "N/A"}</div>
+                ):(
+                  <div className="mt-1 text-sm text-gray-900">{ "N/A"}</div>
+                )
+                  }
               </div>
               <div className="sm:col-span-1">
                 <dt className="text-sm font-medium text-gray-500">Role</dt>

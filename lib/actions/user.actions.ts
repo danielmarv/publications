@@ -3,10 +3,12 @@
 import { createAdminClient, createSessionClient } from "@/lib/appwrite";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { Query, ID } from "node-appwrite";
-import { parseStringify } from "@/lib/utils";
+import { constructFileUrl, parseStringify } from "@/lib/utils";
 import { cookies } from "next/headers";
 import { avatarPlaceholderUrl } from "@/constants";
 import { redirect } from "next/navigation";
+import { InputFile } from "node-appwrite/file";
+import { BinaryLike } from "crypto";
 
 export const getUserByEmail = async (email: string) => {
   const { databases } = await createAdminClient();
@@ -151,3 +153,32 @@ export const getUsers = async () => {
   return result.documents;
 };
 
+
+
+export const updateUserData = async (data: { [key: string]: any }) => {
+      const currentUser = await getCurrentUser();
+      console.log("current User is: ", currentUser);
+      const UserDocumentId = currentUser.$id;
+      // const { documents } = await currentUser.getDocuments();
+      const {databases} = await createAdminClient();
+      const result = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.usersCollectionId,
+            UserDocumentId,
+            data
+            );
+            return result;
+            };
+            
+      export const updateProfile = async(File: Blob | BinaryLike) =>{
+            const { storage } = await createAdminClient();
+            const inputFile = InputFile.fromBuffer(File, File.name);
+            const bucketFile = await storage.createFile(
+                  appwriteConfig.bucketId,
+                  ID.unique(),
+                  inputFile
+            );
+            await updateUserData({
+            avatar: constructFileUrl(bucketFile.$id), })
+            return bucketFile;
+      }
