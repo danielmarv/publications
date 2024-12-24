@@ -1,7 +1,6 @@
 {
-    "cSpell.words": [
-        "appwrite",
-        "undraft",
-        "undrafting"
-    ]
+  "editor.fontFamily": "'Gabriola Regular', 'Consolas', monospace",
+  "editor.fontSize": 23,
+  "editor.fontLigatures": true,
+  "editor.fontVariations": false
 }
