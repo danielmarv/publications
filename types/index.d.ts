@@ -24,6 +24,7 @@ declare interface GetFilesProps {
   searchText?: string;
   sort?: string;
   limit?: number;
+  drafted?: boolean;
 }
 
 declare interface GetDepartmentsProps {
