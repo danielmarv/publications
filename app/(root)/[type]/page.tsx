@@ -12,7 +12,9 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
 
   const types = getFileTypesParams(type) as FileType[];
 
-  const files = await getFiles({ types, searchText, sort });
+  const drafted = type === "drafts" ? true : undefined;
+
+  const files = await getFiles({ types, searchText, sort, drafted });
 
   return (
     <div className="page-container">
@@ -40,7 +42,7 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
           ))}
         </section>
       ) : (
-        <p className="empty-list">No files uploaded</p>
+        <p className="empty-list">No {type} uploaded</p>
       )}
     </div>
   );

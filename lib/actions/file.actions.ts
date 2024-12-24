@@ -96,6 +96,7 @@ export const getFiles = async ({
   searchText = '',
   sort = '$createdAt-desc',
   limit,
+  drafted,
 }: GetFilesProps) => {
   const { databases } = await createAdminClient();
 
@@ -105,6 +106,10 @@ export const getFiles = async ({
     if (!currentUser) throw new Error('User not found');
 
     const queries = createQueries(currentUser, types, searchText, sort, limit);
+
+    if (typeof drafted === 'boolean') {
+      queries.push(Query.equal('drafted', [drafted]));
+    }
 
     const files = await databases.listDocuments(
       appwriteConfig.databaseId,
