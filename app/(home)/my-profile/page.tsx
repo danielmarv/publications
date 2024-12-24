@@ -1,15 +1,21 @@
 "use client"
 import React, { useEffect, useState,useRef } from 'react';
 import Image from 'next/image';
-import { getCurrentUser } from '@/lib/actions/user.actions';
+import { getCurrentUser, updateUserData } from '@/lib/actions/user.actions';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import {updateProfile} from '@/lib/actions/user.actions';
 import { Grid } from 'react-loader-spinner'
+import {FaEdit} from 'react-icons/fa'
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from '@/components/ui/button';
 
 const MyProfilePage = () => {
   // State to store user data
   const [user, setUser] = useState<any>(null);
   const [loading, setloading] = useState(false);
+  const[Showform, setShowform] = useState(false)
+  const [IsEditting, setIsEditing] = useState(false)
 
   // Fetch user data on component mount
   useEffect(() => {
@@ -36,29 +42,45 @@ const MyProfilePage = () => {
 
  
 
-  const handleFileChange =async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
+  const handleFileChange =async (e: React.ChangeEvent<HTMLInputElement> | React.FormEvent<HTMLFormElement>,
+      updateType: 'file' | 'data') => {
+            
+    if (updateType === 'file' && e.target instanceof HTMLInputElement) {
+      const file = e.target.files?.[0]
       setloading(true) 
       console.log(file)
-      updateProfile(file) 
+      await updateProfile(file) 
       setTimeout(() => {
             window.location.reload(); // Reload after 2 seconds
           }, 7000);
       // setloading(false)
-     };
-      }
-      
-      // You can add your image upload logic here
-//   const firstfile= user.files[0]
+     } 
+}
+const handleFormData=(e: React.FormEvent<HTMLFormElement>) =>{
+      e.preventDefault(); // Prevent default form submission behavior
+const formData = new FormData(e.currentTarget); // Extract form data
+// Convert FormData to an object (optional)
+const data = Object.fromEntries(formData.entries());
+console.log("Form Data: ", data)
+updateUserData(data) 
+setIsEditing(false)
+setTimeout(() => {
+      window.location.reload(); // Reload after 2 seconds
+    }, 2000);
 
-  // Render the profile page
+}
+
+      const handleForm = () =>{
+            // setShowform((prevState)=>!prevState)
+            setIsEditing((prevState)=>!prevState)
+      }
+      // You can add your image upload logic here
   return (
     <div className="bg-white shadow rounded-lg p-6">
       <input
         type="file"
         ref={fileInputRef}
-        onChange={handleFileChange}
+        onChange={(e) => handleFileChange(e, 'file')}
         accept="image/*"
         style={{ display: 'none' }}
       />
@@ -115,9 +137,46 @@ const MyProfilePage = () => {
                                 wrapperStyle={{}}
                                 wrapperClass="grid-wrapper" /></>}
 
-          <h2 className="mt-4 mb-3 text-xl font-semibold text-gray-900">{user.fullName.toUpperCase()}</h2>
-          <p className="text-gray-900">{user.email}</p>
-         
+          <h2 className="mt-4 mb-3 text-xl font-semibold text-gray-900">{user.fullName.toUpperCase()}  </h2>
+          
+          <p className="text-gray-900">{user.email}  <FaEdit onClick={handleForm} className='inline text-xl hover:cursor-pointer'/></p>
+          {/* <Label htmlFor="email">Email</Label> */}
+              
+              {Showform &&(<>
+                  <Input className='w-60'
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                />
+                <button onClick={handleButtonClick}   className=' w-20 flex font-bold bg-red rounded-lg px-3 ml-5 my-4 cursor-pointer'> Update</button>
+                </>
+              )}
+
+<div className="flex-1">
+          {IsEditting ? (
+            <form onSubmit={handleFormData} className="space-y-4">
+              <div>
+                <Label htmlFor="fullName">Full Name</Label>
+                <Input id="fullName" name="fullName" defaultValue={user.fullName.toUpperCase()} required />
+              </div>
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" name="email" type="email" defaultValue={user.email} required />
+              </div>
+              <div className="flex gap-2">
+                <Button type="submit"    disabled={loading}>Save Changes</Button>
+                <Button type="button" variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
+              </div>
+            </form>
+          ) : (
+            <>
+              {/* <h2 className="text-2xl font-bold">{user.fullName}</h2>
+              <p className="text-gray-600">{user.email}</p> */}
+              <Button onClick={() => setIsEditing(true)} className="mt-2">Edit Profile</Button>
+            </>
+          )}
+        </div>
   
           {/* <p className="mt-2 text-sm text-gray-500">{firstfile.name}</p> */}
           <div className="mt-6 border-t border-gray-200 pt-4">
