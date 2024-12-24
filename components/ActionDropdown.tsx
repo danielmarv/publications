@@ -18,7 +18,6 @@ import {
 import { useState } from 'react';
 import Image from 'next/image';
 import { Models } from 'node-appwrite';
-import { actionsDropdownItems } from '@/constants';
 import Link from 'next/link';
 import { constructDownloadUrl } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
@@ -27,6 +26,7 @@ import {
   deleteFile,
   draftDocument,
   renameFile,
+  undraftDocument,
   updateFileUsers,
 } from '@/lib/actions/file.actions';
 import { usePathname } from 'next/navigation';
@@ -56,31 +56,6 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     //   setEmails([]);
   };
 
-  const DraftConfirmationDialog = ({ isOpen, onClose, document }: DraftDialogProps) => {
-    const handleDraft = async () => {
-      const success = await draftDocument(document.$id);
-      if (success) {
-        alert("Document drafted for publishing successfully!");
-        onClose();
-      }
-    };
-  
-    return (
-      <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Draft for Publishing</DialogTitle>
-          </DialogHeader>
-          <p>Are you sure you want to draft the document titled "{document.name}" for publishing?</p>
-          <DialogFooter>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button onClick={handleDraft}>Confirm</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    );
-  };
-
   const handleAction = async () => {
     if (!action) return;
     setIsLoading(true);
@@ -92,17 +67,11 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
       share: () => updateFileUsers({ fileId: file.$id, emails, path }),
       delete: () =>
         deleteFile({ fileId: file.$id, bucketFileId: file.bucketFileId, path }),
-      draft: () => {
-        draftDocument(file.$id);
-      },
+      draft: () => draftDocument(file.$id),
+      undraft: () => undraftDocument(file.$id),
     };
 
-    if (action.value === 'draft') {
-      setIsModalOpen(true);
-    } else {
-      success = await actions[action.value as keyof typeof actions]();
-    }
-
+    success = await actions[action.value as keyof typeof actions]();
     if (success) closeAllModals();
 
     setIsLoading(false);
@@ -154,14 +123,19 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
             </p>
           )}
           {value === 'draft' && (
-            <DraftConfirmationDialog
-              isOpen={isModalOpen}
-              onClose={closeAllModals}
-              document={file}
-            />
+            <p>
+              Are you sure you want to draft the document titled "{file.name}"
+              for publishing?
+            </p>
+          )}
+          {value === 'undraft' && (
+            <p>
+              Are you sure you want to undraft the document titled "{file.name}"
+              ?
+            </p>
           )}
         </DialogHeader>
-        {['rename', 'delete', 'share', 'draft'].includes(value) && (
+        {['rename', 'delete', 'share', 'draft', 'undraft'].includes(value) && (
           <DialogFooter className="flex flex-col gap-3 md:flex-row">
             <Button onClick={closeAllModals} className="modal-cancel-button">
               Cancel
@@ -183,6 +157,43 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
       </DialogContent>
     );
   };
+
+  const draftAction = file.drafted
+    ? { value: 'undraft', label: 'Undraft', icon: '/assets/icons/file-svg.svg', }
+    : {
+        value: 'draft',
+        label: 'Draft for Publishing',
+        icon: '/assets/icons/file-svg.svg',
+      };
+
+  const actionsDropdownItems = [
+    draftAction,
+    {
+      label: 'Rename',
+      icon: '/assets/icons/edit.svg',
+      value: 'rename',
+    },
+    {
+      label: 'Details',
+      icon: '/assets/icons/info.svg',
+      value: 'details',
+    },
+    {
+      label: 'Share',
+      icon: '/assets/icons/share.svg',
+      value: 'share',
+    },
+    {
+      label: 'Download',
+      icon: '/assets/icons/download.svg',
+      value: 'download',
+    },
+    {
+      label: 'Delete',
+      icon: '/assets/icons/delete.svg',
+      value: 'delete',
+    },
+  ];
 
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -208,9 +219,14 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                 setAction(actionItem);
 
                 if (
-                  ['rename', 'share', 'delete', 'details', 'draft'].includes(
-                    actionItem.value
-                  )
+                  [
+                    'rename',
+                    'share',
+                    'delete',
+                    'details',
+                    'draft',
+                    'undraft',
+                  ].includes(actionItem.value)
                 ) {
                   setIsModalOpen(true);
                 }

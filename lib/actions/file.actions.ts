@@ -161,6 +161,22 @@ export const draftDocument = async (documentId: string) => {
   }
 };
 
+export const undraftDocument = async (fileId: string) => {
+  const { databases } = await createAdminClient();
+  try {
+    const updatedFile = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      fileId,
+      { drafted: false } // Set drafted to false
+    );
+    return updatedFile;
+  } catch (error) {
+    console.error("Error undrafting document:", error);
+    return null;
+  }
+};
+
 export const updateFileUsers = async ({
   fileId,
   emails,

@@ -40,7 +40,7 @@ export const navItems = [
     url: "/others",
   },
 ];
-
+   
 export const actionsDropdownItems = [
   {
     label: "Rename",
