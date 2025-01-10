@@ -10,6 +10,11 @@ export const navItems = [
     url: "/documents",
   },
   {
+    name: "Drafts",
+    icon: "/assets/icons/others.svg",
+    url: "/drafts",
+  },
+  {
     name: "Publications",
     icon: "/assets/icons/images.svg",
     url: "/pubs",
@@ -18,11 +23,6 @@ export const navItems = [
     name: "Comments",
     icon: "/assets/icons/video.svg",
     url: "/media",
-  },
-  {
-    name: "Drafts",
-    icon: "/assets/icons/others.svg",
-    url: "/others",
   },
   {
     name: "Write",
@@ -40,7 +40,7 @@ export const navItems = [
     url: "/others",
   },
 ];
-
+   
 export const actionsDropdownItems = [
   {
     label: "Rename",
@@ -66,6 +66,11 @@ export const actionsDropdownItems = [
     label: "Delete",
     icon: "/assets/icons/delete.svg",
     value: "delete",
+  },
+  {
+    label: "Draft for Publishing",
+    icon: "/assets/icons/file-svg.svg",
+    value: "draft",
   },
 ];
 

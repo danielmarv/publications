@@ -1,11 +1,28 @@
-import { Models } from "node-appwrite";
-import Link from "next/link";
-import Thumbnail from "@/components/Thumbnail";
-import { convertFileSize } from "@/lib/utils";
-import FormattedDateTime from "@/components/FormattedDateTime";
-import ActionDropdown from "@/components/ActionDropdown";
+"use client";
+
+import { Models } from 'node-appwrite';
+import Link from 'next/link';
+import Thumbnail from '@/components/Thumbnail';
+import { convertFileSize } from '@/lib/utils';
+import FormattedDateTime from '@/components/FormattedDateTime';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import ActionDropdown from '@/components/ActionDropdown';
+import { appwriteConfig } from "@/lib/appwrite/config";
+import { createAdminClient } from "@/lib/appwrite";
+import { useState } from 'react';
 
 const Card = ({ file }: { file: Models.Document }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const closeAllModals = () => {
+    setIsModalOpen(false);
+  };
   return (
     <Link href={file.url} target="_blank" className="file-card">
       <div className="flex justify-between">
@@ -19,6 +36,7 @@ const Card = ({ file }: { file: Models.Document }) => {
 
         <div className="flex flex-col items-end justify-between">
           <ActionDropdown file={file} />
+          
           <p className="body-1">{convertFileSize(file.size)}</p>
         </div>
       </div>
