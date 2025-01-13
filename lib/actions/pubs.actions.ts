@@ -4,7 +4,7 @@ import { createAdminClient, createSessionClient } from "@/lib/appwrite";
 import { InputFile } from "node-appwrite/file";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { ID, Query } from "node-appwrite";
-import { constructFileUrl, getFileType, parseStringify } from "@/lib/utils";
+import { constructDownloadUrl, constructFileUrl, getFileType, parseStringify } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/actions/user.actions";
 
@@ -25,24 +25,26 @@ export const createPublication = async ({
   const { storage, databases } = await createAdminClient();
 
   try {
-    const inputFile = InputFile.fromBuffer(file, file.name);
+//     const DocId = file
 
-    const storageFile = await storage.createFile(
-      appwriteConfig.bucketId,
-      ID.unique(),
-      inputFile
+    const storageFile = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      file
     );
-
+    console.log(storageFile)
+//RELATIONSHIP BETWEEN THE PUBLICATION AND THE RELATED FILE, THE FILE IS ALREADY UPLOADED, NO NEED TO UPOAD IT AGAIN, JUST REFER TO IT
     const publication = {
       title,
+      fileId:storageFile.bucketFileId,
       description,
-      fileUrl: constructFileUrl(storageFile.$id),
-      fileName: storageFile.name,
-      fileType: getFileType(storageFile.name).type,
-      fileSize: storageFile.sizeOriginal,
       owner: ownerId,
-      bucketFileId: storageFile.$id,
-    };
+      PubDownloadUrl: constructDownloadUrl(storageFile.$id),
+      // fileName: storageFile.name,
+      // fileType: getFileType(storageFile.name).type,
+      PubSize: storageFile.sizeOriginal,
+      // bucketFileId: storageFile.$id,
+    }; 
 
     const newPublication = await databases.createDocument(
       appwriteConfig.databaseId,
@@ -59,26 +61,28 @@ export const createPublication = async ({
   }
 };
 
-export const getPublications = async ({
-  ownerId,
-  searchText = "",
-  sort = "$createdAt-desc",
-  limit,
-}: GetPublicationsProps): Promise<Publication[] | null> => {
+export const getPublications = async (
+//   ownerId,
+//   searchText = "",
+//   sort = "$createdAt-desc",
+//   limit,
+
+// : GetPublicationsProps): Promise<Publication[] | null>
+)=> {
   const { databases } = await createAdminClient();
 
   try {
-    const queries = [
-      Query.equal("owner", [ownerId]),
-      ...(searchText ? [Query.search("title", searchText)] : []),
-      ...(limit ? [Query.limit(limit)] : []),
-      Query.orderDesc(sort.split("-")[0]),
-    ];
+//     const queries = [
+//       Query.equal("owner", [ownerId]),
+//       ...(searchText ? [Query.search("title", searchText)] : []),
+//       ...(limit ? [Query.limit(limit)] : []),
+//       Query.orderDesc(sort.split("-")[0]),
+//     ];
 
     const publications = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.publicationCollectionId,
-      queries
+      // queries
     );
 
     return parseStringify(publications.documents);  

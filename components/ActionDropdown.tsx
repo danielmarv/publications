@@ -29,8 +29,10 @@ import {
   undraftDocument,
   updateFileUsers,
 } from '@/lib/actions/file.actions';
+import { createPublication } from '@/lib/actions/pubs.actions';
 import { usePathname } from 'next/navigation';
 import { FileDetails, ShareInput } from '@/components/ActionsModalContent';
+import { getCurrentUser } from '@/lib/actions/user.actions';
 
 interface DraftDialogProps {
   isOpen: boolean;
@@ -45,6 +47,8 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
   const [name, setName] = useState(file.name);
   const [isLoading, setIsLoading] = useState(false);
   const [emails, setEmails] = useState<string[]>([]);
+  const [Title, setTitle] = useState(file.name);
+  const [Description, setDescription] = useState(file.name);
 
   const path = usePathname();
 
@@ -60,8 +64,11 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     if (!action) return;
     setIsLoading(true);
     let success = false;
-
+    const currentUser = await getCurrentUser();
+      const OwnerId = currentUser.$id
     const actions = {
+      
+      publish: () => createPublication({ file: file.$id, title: Title, description: Description, ownerId: OwnerId, path }),
       rename: () =>
         renameFile({ fileId: file.$id, name, extension: file.extension, path }),
       share: () => updateFileUsers({ fileId: file.$id, emails, path }),
@@ -116,6 +123,24 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
               onRemove={handleRemoveUser}
             />
           )}
+            {value === 'publish' && (
+           <>
+           <Input
+           type="text"
+           placeholder='Title of Publication'
+      //      value={file.name}
+      required
+           onChange={(e) => setTitle(e.target.value)}
+         />
+         <Input
+           type="text"
+      //      value=""
+      required
+           placeholder='Publication Description'
+           onChange={(e) => setDescription(e.target.value)}
+         />
+           </>
+          )}
           {value === 'delete' && (
             <p className="delete-confirmation">
               Are you sure you want to delete{` `}
@@ -135,7 +160,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
             </p>
           )}
         </DialogHeader>
-        {['rename', 'delete', 'share', 'draft', 'undraft'].includes(value) && (
+        {['publish','rename', 'delete', 'share', 'draft', 'undraft'].includes(value) && (
           <DialogFooter className="flex flex-col gap-3 md:flex-row">
             <Button onClick={closeAllModals} className="modal-cancel-button">
               Cancel
@@ -168,6 +193,11 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
 
   const actionsDropdownItems = [
     draftAction,
+     {
+      label: 'Publish',
+      icon: '/assets/icons/publish.svg',
+      value: 'publish',
+    },
     {
       label: 'Rename',
       icon: '/assets/icons/edit.svg',
@@ -220,6 +250,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
 
                 if (
                   [
+                   'publish',
                     'rename',
                     'share',
                     'delete',
