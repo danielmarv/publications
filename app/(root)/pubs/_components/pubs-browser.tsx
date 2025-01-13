@@ -29,11 +29,6 @@ function Placeholder() {
         src="/empty.svg"
       />
       <div className="text-2xl mt-4 text-center">You have no publications, upload one now</div>
-      <Button
-      className="h4 h-[52px] items-center justify-center gap-4 lg:justify-center lg:w-[200px] lg:px-[30px] lg:rounded-full rounded-xl bg-red text-white hover:bg-amber-50 hover:text-black "
-      >
-        Write
-      </Button>
     </div>
   );
 }
