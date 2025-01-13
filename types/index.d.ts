@@ -85,7 +85,7 @@ declare interface ShareInputProps {
 
 // ============================== CREATE PUBLICATION
 declare interface CreatePublicationProps {
-  file: File;  // The file object (document, image, etc.) to be uploaded
+  file: string;  // The file object (document, image, etc.) to be uploaded
   title: string;  // The title of the publication
   description: string;  // A brief description of the publication
   ownerId: string;  // The ID of the user who owns the publication
