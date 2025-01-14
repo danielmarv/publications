@@ -65,10 +65,16 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     setIsLoading(true);
     let success = false;
     const currentUser = await getCurrentUser();
-      const OwnerId = currentUser.$id
+    const OwnerId = currentUser.$id;
     const actions = {
-      
-      publish: () => createPublication({ file: file.$id, title: Title, description: Description, ownerId: OwnerId, path }),
+      publish: () =>
+        createPublication({
+          file: file.$id,
+          title: Title,
+          description: Description,
+          ownerId: OwnerId,
+          path,
+        }),
       rename: () =>
         renameFile({ fileId: file.$id, name, extension: file.extension, path }),
       share: () => updateFileUsers({ fileId: file.$id, emails, path }),
@@ -123,23 +129,23 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
               onRemove={handleRemoveUser}
             />
           )}
-            {value === 'publish' && (
-           <>
-           <Input
-           type="text"
-           placeholder='Title of Publication'
-      //      value={file.name}
-      required
-           onChange={(e) => setTitle(e.target.value)}
-         />
-         <Input
-           type="text"
-      //      value=""
-      required
-           placeholder='Publication Description'
-           onChange={(e) => setDescription(e.target.value)}
-         />
-           </>
+          {value === 'publish' && (
+            <>
+              <Input
+                type="text"
+                placeholder="Title of Publication"
+                //      value={file.name}
+                required
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <Input
+                type="text"
+                //      value=""
+                required
+                placeholder="Publication Description"
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </>
           )}
           {value === 'delete' && (
             <p className="delete-confirmation">
@@ -160,7 +166,9 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
             </p>
           )}
         </DialogHeader>
-        {['publish','rename', 'delete', 'share', 'draft', 'undraft'].includes(value) && (
+        {['publish', 'rename', 'delete', 'share', 'draft', 'undraft'].includes(
+          value
+        ) && (
           <DialogFooter className="flex flex-col gap-3 md:flex-row">
             <Button onClick={closeAllModals} className="modal-cancel-button">
               Cancel
@@ -184,7 +192,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
   };
 
   const draftAction = file.drafted
-    ? { value: 'undraft', label: 'Undraft', icon: '/assets/icons/file-svg.svg', }
+    ? { value: 'undraft', label: 'Undraft', icon: '/assets/icons/file-svg.svg' }
     : {
         value: 'draft',
         label: 'Draft for Publishing',
@@ -193,7 +201,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
 
   const actionsDropdownItems = [
     draftAction,
-     {
+    {
       label: 'Publish',
       icon: '/assets/icons/publish.svg',
       value: 'publish',
@@ -250,7 +258,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
 
                 if (
                   [
-                   'publish',
+                    'publish',
                     'rename',
                     'share',
                     'delete',

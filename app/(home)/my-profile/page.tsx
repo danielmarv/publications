@@ -27,8 +27,7 @@ const MyProfilePage = () => {
         setUser(fetchedUser); // Update state with user data
       } catch (error) {
         console.error("No active session", error);
-      }
-      return 
+      } 
     };
 
     fetchUser();
