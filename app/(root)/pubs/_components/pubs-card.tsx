@@ -48,14 +48,15 @@ const Card = ({ publication, role, name }: PublicationCardProps) => {
           className="!size-20"
           imageClassName="!size-11"
         />
-
-        <div className="flex flex-col items-end justify-between">
-          <ActionDropdown
-            publication={publication}
-            role={role}
-            currentUserName={name}
-          />
-        </div>
+        {role === 'reviewer' && (
+          <div className="flex flex-col items-end justify-between">
+            <ActionDropdown
+              publication={publication}
+              role={role}
+              currentUserName={name}
+            />
+          </div>
+        )}
       </div>
 
       <div className="file-card-details">
