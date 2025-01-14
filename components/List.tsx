@@ -1,13 +1,11 @@
 "use client"
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { kMaxLength } from "buffer";
 import Link from "next/link";
 import { getPublications } from "@/lib/actions/pubs.actions";
 import { constructDownloadUrl, constructFileUrl } from "@/lib/utils";
 import mammoth from "mammoth";
 import { TextAlignCenterIcon } from "@radix-ui/react-icons";
-
 
 type Publication = {
   title: string;
@@ -35,9 +33,6 @@ type Publication = {
   tags: string[]; 
 };
 
-// interface PublicationListProps {
-//   publications: Publication[];
-// }
 const truncateString = (text: string, maxLength: number): string => {
   return text.length > maxLength ? text.slice(0, maxLength) + " . . ." : text;
 };
