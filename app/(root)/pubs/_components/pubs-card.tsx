@@ -57,6 +57,16 @@ const Card = ({ publication, role, name }: PublicationCardProps) => {
             />
           </div>
         )}
+        
+        {role === 'approver' && (
+          <div className="flex flex-col items-end justify-between">
+            <ActionDropdown
+              publication={publication}
+              role={role}
+              currentUserName={name}
+            />
+          </div>
+        )}
       </div>
 
       <div className="file-card-details">
