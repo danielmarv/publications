@@ -69,7 +69,7 @@ export const createPublication = async ({
 export const getPublications = async ({
   ownerId,
   role,
-  searchText = '',
+  searchText,
   limit,
 }: {
   ownerId: string;
@@ -86,7 +86,7 @@ export const getPublications = async ({
     if (role === "admin" || role === "reviewer") {
       // Fetch all publications for admin or reviewers
       queries.push(Query.orderDesc("$createdAt"));
-    } else if (role === "user") {
+    } else if (role === "author") {
       // Fetch only owned publications for normal users
       queries.push(Query.equal("owner", [ownerId]));
     }

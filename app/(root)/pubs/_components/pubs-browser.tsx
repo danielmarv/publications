@@ -46,7 +46,7 @@ export function PublicationBrowser({ title }: titleProps) {
       const fetchedPublications = await getPublications({
         ownerId: currentUser?.$id,
         role: fetchedRole,
-        searchText: "",
+        searchText: query,
         limit: 10,
       });
       console.log("Current role: ", currentUser?.role);
@@ -59,8 +59,8 @@ export function PublicationBrowser({ title }: titleProps) {
   }, [query]);
 
   const filteredPublications = publications.filter((publication) => {
-    if (type === "all") return true;  // No filtering
-    return publication.fileType.includes(type);  // Filter by file type
+    if (type === "all") return true;
+    return publication.fileType.includes(type);
   });
 
   return (
@@ -85,13 +85,6 @@ export function PublicationBrowser({ title }: titleProps) {
           </TabsList>
 
         </div>
-
-        {/* {isLoading && (
-          <div className="mt-12 flex w-full flex-col items-center gap-8 md:mt-24">
-            <Loader2 className="size-32 animate-spin text-gray-500" />
-            <div className="text-2xl">Loading your publications...</div>
-          </div>
-        )} */}
 
         <TabsContent value="grid">
           <div className="grid grid-cols-1 gap-2 md:grid-cols-3 md:gap-4">
