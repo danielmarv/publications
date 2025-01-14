@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Card from "./pubs-card";
 import Image from "next/image";
-import { GridIcon, Loader2 } from "lucide-react";
+import { GridIcon } from "lucide-react";
 import { SearchBar } from "./search-bar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getPublications } from "@/lib/actions/pubs.actions";
