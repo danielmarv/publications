@@ -49,8 +49,6 @@ export function PublicationBrowser({ title }: titleProps) {
         searchText: query,
         limit: 10,
       });
-      console.log("Current role: ", currentUser?.role);
-      console.log("Current Name: ", currentUser?.fullName);
 
       setPublications(fetchedPublications || []);
     };

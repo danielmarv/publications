@@ -82,6 +82,14 @@ export const reviewItems = [
   },
 ];
 
+export const approveItems = [
+  {
+    label: 'Approve',
+    icon: '/assets/icons/info.svg',
+    value: 'approve',
+  },
+];
+
 export const sortTypes = [
   {
     label: 'Date created (newest)',

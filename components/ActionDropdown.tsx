@@ -155,7 +155,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
           )}
           {value === 'draft' && (
             <p>
-              Are you sure you want to draft the document titled "{file.name}"
+              Are you sure you want to draft the document titled &quot;{file.name}&quot;
               for publishing?
             </p>
           )}
