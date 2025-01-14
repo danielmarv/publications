@@ -21,13 +21,10 @@ import { reviewItems } from '@/constants';
 import { Button } from '@/components/ui/button';
 import {
   addReview,
-  updatePublication,
 } from '@/lib/actions/pubs.actions';
-import { usePathname } from 'next/navigation';
 
 const ActionDropdown = ({
   publication,
-  role,
   currentUserName,
 }: {
   publication: Publication;
@@ -39,8 +36,6 @@ const ActionDropdown = ({
   const [action, setAction] = useState<ActionType | null>(null);
   const [reviewComment, setReviewComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
-  const path = usePathname();
 
   const handleReview = async () => {
     setIsLoading(true);
