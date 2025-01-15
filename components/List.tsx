@@ -32,6 +32,7 @@ type Publication = {
   review: string[];
   status: string;
   tags: string[];
+  extractedText:string;
 };
 
 const truncateString = (text: string, maxLength: number): string => {
@@ -49,6 +50,7 @@ const PublicationList = () => {
           searchText: '',
           limit: 10,
         });
+        console.log(publication)
         setpublications(publication);
       } catch (error) {
         console.error('Error fetching publications:', error);
@@ -58,21 +60,43 @@ const PublicationList = () => {
     handleGetPublications();
   }, []);
   useEffect(() => {
-    const handleExtractedData = async () => {
-      try {
-        const fileUrl = await constructFileUrl(publications[0].fileId);
-        const response = await fetch(fileUrl);
-        const arrayBuffer = await response.arrayBuffer();
-        const result = await mammoth.extractRawText({ arrayBuffer });
-        setExtractedText(result.value);
-        console.log(ExtractedText);
-      } catch (error) {
-        console.error('Error reading file:', error);
-      }
-    };
-    handleExtractedData();
-  });
-
+        const handleExtractedData = async () => {
+          try {
+            for (const publication of publications) {
+              if (publication.fileId) {
+                const fileUrl = constructFileUrl(publication.fileId);
+                const response = await fetch(fileUrl);
+                const arrayBuffer = await response.arrayBuffer();
+                const result = await mammoth.extractRawText({ arrayBuffer });
+                setpublications((prevPublications) =>
+                  prevPublications.map((pub) =>
+                    pub.fileId === publication.fileId
+                      ? { ...pub, extractedText: result.value.slice(0,255)+" . . . " }
+                      : pub
+                  )
+                );
+                console.log(result.value); // Log the extracted text
+              }
+            }
+          } catch (error) {
+            console.error("Error reading file:", error);
+          }
+        };
+        handleExtractedData();
+      }, [publications]);
+//   const handleExtractedData = async (fileId: string) => {
+//         try {
+//           const fileUrl = constructFileUrl(fileId);
+//           const response = await fetch(fileUrl);
+//           const arrayBuffer = await response.arrayBuffer();
+//           const result = await mammoth.extractRawText({ arrayBuffer });
+//           setExtractedText(result.value);
+//           console.log(ExtractedText);
+//         } catch (error) {
+//           console.error('Error reading file:', error);
+//         }
+//       };
+      
   return (
     <div className="mx-auto max-w-6xl p-4 sm:p-6 md:p-8">
       <h1 className="mb-6 text-center text-xl font-semibold sm:text-2xl md:text-left">
@@ -107,7 +131,7 @@ const PublicationList = () => {
                 {pub.description && (
                   <Link href={`home/${pub.title}`}>
                     <p className="hover:cursor-pointer mb-2 text-sm max-w-[800px] text-gray-700">
-                      {pub.description} {truncateString(ExtractedText, 225)}
+                      {pub.description} {pub.extractedText}
                     </p>
                   </Link>
                 )}
