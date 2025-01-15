@@ -3,10 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import Link from 'next/link';
-import { listPublications } from '@/lib/actions/pubs.actions';
+import { listPublications, UpdateCiteCount } from '@/lib/actions/pubs.actions';
 import { constructDownloadUrl, constructFileUrl } from '@/lib/utils';
 import mammoth from 'mammoth';
 import { TextAlignCenterIcon } from '@radix-ui/react-icons';
+import CiteModal from './CiteModal';
 
 type Publication = {
   title: string;
@@ -35,13 +36,10 @@ type Publication = {
   extractedText:string;
 };
 
-const truncateString = (text: string, maxLength: number): string => {
-  return text.length > maxLength ? text.slice(0, maxLength) + ' . . .' : text;
-};
 
 const PublicationList = () => {
   const [publications, setpublications] = useState<Publication[]>([]);
-  const [ExtractedText, setExtractedText] = useState('');
+  const [active, Setactive] = useState<string | null>(null);
   // const download = constructDownloadUrl()
   useEffect(() => {
     const handleGetPublications = async () => {
@@ -75,7 +73,7 @@ const PublicationList = () => {
                       : pub
                   )
                 );
-                console.log(result.value); // Log the extracted text
+                // console.log(result.value); 
               }
             }
           } catch (error) {
@@ -84,18 +82,14 @@ const PublicationList = () => {
         };
         handleExtractedData();
       }, [publications]);
-//   const handleExtractedData = async (fileId: string) => {
-//         try {
-//           const fileUrl = constructFileUrl(fileId);
-//           const response = await fetch(fileUrl);
-//           const arrayBuffer = await response.arrayBuffer();
-//           const result = await mammoth.extractRawText({ arrayBuffer });
-//           setExtractedText(result.value);
-//           console.log(ExtractedText);
-//         } catch (error) {
-//           console.error('Error reading file:', error);
-//         }
-//       };
+
+      const handleCiteModal = (pub_Id: string)=>{
+        UpdateCiteCount(pub_Id)
+        Setactive(pub_Id)
+      }
+      const handleClose = ()=>{
+        Setactive(null)
+      }
       
   return (
     <div className="mx-auto max-w-6xl p-4 sm:p-6 md:p-8">
@@ -136,15 +130,16 @@ const PublicationList = () => {
                   </Link>
                 )}
 
-                {/* {pub.source && (
-                <p className="text-xs italic text-gray-500">{pub.source}</p>
-              )} */}
+                {
+                        active && (<CiteModal handleClose={handleClose} pub_Id={active} />)
+                }
 
                 <div className="flex flex-wrap gap-4 mt-2 text-xs text-gray-500  ">
                   <span className="cursor-pointer hover:underline font-bold">
                     Save
                   </span>
-                  <span className="cursor-pointer hover:underline font-bold">
+
+                  <span onClick={()=>handleCiteModal(pub.$id)} className="cursor-pointer hover:underline font-bold">
                     {' '}
                     <TextAlignCenterIcon className="inline font-bold text-4xl" />{' '}
                     Cite
