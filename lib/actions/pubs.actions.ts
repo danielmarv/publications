@@ -112,6 +112,44 @@ export const getPublications = async ({
   }
 };
 
+export const listPublications = async ({
+  searchText,
+  limit,
+}: {
+  searchText?: string;
+  limit?: number;
+}): Promise<Publication[] | null> => {
+  const { databases } = await createAdminClient();
+
+  try {
+   
+    const queries = [];
+
+    queries.push(Query.equal("status", "Approved"));
+
+    queries.push(Query.orderDesc("$createdAt"));
+
+    if (searchText) {
+      queries.push(Query.search("title", searchText));
+    }
+
+    if (limit) {
+      queries.push(Query.limit(limit));
+    }
+
+    const publications = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.publicationCollectionId,
+      queries
+    );
+
+    return parseStringify(publications.documents);
+  } catch (error) {
+    handleError(error, 'Failed to fetch publications');
+    return null;
+  }
+};
+
 export const updatePublication = async ({
   publicationId,
   updates,
