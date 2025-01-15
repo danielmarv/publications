@@ -5,17 +5,7 @@ import Link from 'next/link';
 import Thumbnail from '@/components/Thumbnail';
 import { convertFileSize } from '@/lib/utils';
 import FormattedDateTime from '@/components/FormattedDateTime';
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import ActionDropdown from '@/components/ActionDropdown';
-import { appwriteConfig } from "@/lib/appwrite/config";
-import { createAdminClient } from "@/lib/appwrite";
 import { useState } from 'react';
 
 const Card = ({ file }: { file: Models.Document }) => {

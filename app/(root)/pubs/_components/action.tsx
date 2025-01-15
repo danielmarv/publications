@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Dialog,
@@ -6,7 +6,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,76 +14,77 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useState } from "react";
-import Image from "next/image";
-import { actionsDropdownItems } from "@/constants";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  deletePublication,
-  renamePublication,
-  sharePublication,
-} from "@/lib/actions/pubs.actions";
-import { usePathname } from "next/navigation";
+} from '@/components/ui/dropdown-menu';
+import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import Image from 'next/image';
+import { reviewItems, approveItems } from '@/constants';
+import { Button } from '@/components/ui/button';
+import { addReview, updatePublication } from '@/lib/actions/pubs.actions';
 
-const ActionDropdown = ({ publication }: { publication: Publication }) => {
+const ActionDropdown = ({
+  publication,
+  role,
+  currentUserName,
+}: {
+  publication: Publication;
+  role: string;
+  currentUserName: string;
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [action, setAction] = useState<ActionType | null>(null);
-  const [title, setTitle] = useState(publication.title);
+  const [reviewComment, setReviewComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [emails, setEmails] = useState<string[]>([]);
 
   const path = usePathname();
 
-  const closeAllModals = () => {
-    setIsModalOpen(false);
-    setIsDropdownOpen(false);
-    setAction(null);
-    setTitle(publication.title);
-    setEmails([]);
+  const handleReview = async () => {
+    setIsLoading(true);
+
+    const success = await addReview({
+      publicationId: publication.$id,
+      reviewerName: currentUserName,
+      reviewComment,
+    });
+
+    if (success) {
+      setIsModalOpen(false);
+    }
+
+    setIsLoading(false);
   };
 
   const handleAction = async () => {
     if (!action) return;
     setIsLoading(true);
-
     let success = false;
-
     const actions = {
-      rename: () =>
-        renamePublication({
+      review: () =>
+        addReview({
           publicationId: publication.$id,
-          updates: { title },
-          path,
+          reviewerName: currentUserName,
+          reviewComment,
         }),
-      share: () => sharePublication({ publicationId: publication.$id, emails }),
-      delete: () =>
-        deletePublication({
+      approve: () =>
+        updatePublication({
           publicationId: publication.$id,
-          bucketFileId: publication.bucketFileId,
+          updates: { status: 'Approved' },
           path,
         }),
     };
 
-    success = await actions[action.value as keyof typeof actions]();
-
-    if (success) closeAllModals();
-
-    setIsLoading(false);
-  };
-
-  const handleRemoveUser = async (email: string) => {
-    const updatedEmails = emails.filter((e) => e !== email);
-
-    const success = await sharePublication({
-      publicationId: publication.$id,
-      emails: updatedEmails,
-    });
-
-    if (success) setEmails(updatedEmails);
-    closeAllModals();
+    try {
+      success = await actions[action.value as keyof typeof actions]();
+      if (success) {
+        console.log(`${action.label} action completed successfully.`);
+        setIsModalOpen(false);
+      }
+    } catch (error) {
+      console.error(`Failed to execute ${action.label} action:`, error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const renderDialogContent = () => {
@@ -93,63 +94,38 @@ const ActionDropdown = ({ publication }: { publication: Publication }) => {
 
     return (
       <DialogContent className="shad-dialog button">
-        <DialogHeader className="flex flex-col gap-3">
-          <DialogTitle className="text-center text-light-100">
-            {label}
-          </DialogTitle>
-          {value === "rename" && (
-            <Input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          )}
-          {value === "share" && (
-            <div className="flex flex-col gap-2">
-              <Input
-                type="email"
-                placeholder="Enter email to share"
-                onChange={(e) => setEmails([...emails, e.target.value])}
-              />
-              <div className="flex flex-wrap gap-2">
-                {emails.map((email) => (
-                  <span
-                    key={email}
-                    className="bg-light-100 px-2 py-1 rounded-lg"
-                    onClick={() => handleRemoveUser(email)}
-                  >
-                    {email}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-          {value === "delete" && (
-            <p className="delete-confirmation">
-              Are you sure you want to delete {` `}
-              <span className="delete-file-name">{publication.title}</span>?
-            </p>
-          )}
+        <DialogHeader>
+          <DialogTitle>{label}</DialogTitle>
         </DialogHeader>
-        {["rename", "delete", "share"].includes(value) && (
-          <DialogFooter className="flex flex-col gap-3 md:flex-row">
-            <Button onClick={closeAllModals} className="modal-cancel-button">
-              Cancel
-            </Button>
-            <Button onClick={handleAction} className="modal-submit-button">
-              <p className="capitalize">{value}</p>
-              {isLoading && (
-                <Image
-                  src="/assets/icons/loader.svg"
-                  alt="loader"
-                  width={24}
-                  height={24}
-                  className="animate-spin"
-                />
-              )}
-            </Button>
-          </DialogFooter>
+        {value === 'review' && (
+          <textarea
+            placeholder="Enter your review comment (optional)"
+            value={reviewComment}
+            onChange={(e) => setReviewComment(e.target.value)}
+            className="w-full rounded border p-2"
+          />
         )}
+        {value === 'approve' && (
+          <p>
+            Are you sure you want to approve the document: &quot;
+            {publication.title}&quot; to be published?
+          </p>
+        )}
+        <DialogFooter>
+          <Button onClick={() => setIsModalOpen(false)}>Cancel</Button>
+          <Button onClick={handleAction} disabled={isLoading}>
+            <p className="capitalize">{value}</p>
+            {isLoading && (
+              <Image
+                src="/assets/icons/loader.svg"
+                alt="loader"
+                width={24}
+                height={24}
+                className="animate-spin"
+              />
+            )}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     );
   };
@@ -170,29 +146,61 @@ const ActionDropdown = ({ publication }: { publication: Publication }) => {
             {publication.title}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {actionsDropdownItems.map((actionItem) => (
-            <DropdownMenuItem
-              key={actionItem.value}
-              className="shad-dropdown-item"
-              onClick={() => {
-                setAction(actionItem);
+          {role === 'reviewer' && (
+            <div>
+              {reviewItems.map((actionItem) => (
+                <DropdownMenuItem
+                  key={actionItem.value}
+                  className="shad-dropdown-item"
+                  onClick={() => {
+                    setAction(actionItem);
 
-                if (["rename", "share", "delete"].includes(actionItem.value)) {
-                  setIsModalOpen(true);
-                }
-              }}
-            >
-              <div className="flex items-center gap-2">
-                <Image
-                  src={actionItem.icon}
-                  alt={actionItem.label}
-                  width={30}
-                  height={30}
-                />
-                {actionItem.label}
-              </div>
-            </DropdownMenuItem>
-          ))}
+                    if (['review'].includes(actionItem.value)) {
+                      setIsModalOpen(true);
+                    }
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src={actionItem.icon}
+                      alt={actionItem.label}
+                      width={30}
+                      height={30}
+                    />
+                    {actionItem.label}
+                  </div>
+                </DropdownMenuItem>
+              ))}
+            </div>
+          )}
+
+          {role === 'approver' && (
+            <div>
+              {approveItems.map((actionItem) => (
+                <DropdownMenuItem
+                  key={actionItem.value}
+                  className="shad-dropdown-item"
+                  onClick={() => {
+                    setAction(actionItem);
+
+                    if (['approve'].includes(actionItem.value)) {
+                      setIsModalOpen(true);
+                    }
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src={actionItem.icon}
+                      alt={actionItem.label}
+                      width={30}
+                      height={30}
+                    />
+                    {actionItem.label}
+                  </div>
+                </DropdownMenuItem>
+              ))}
+            </div>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
 

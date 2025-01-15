@@ -5,30 +5,26 @@ import { format } from "date-fns";
 export const columns: ColumnDef<any, any>[] = [
   {
     header: "File Name",
-    accessorKey: "title", // The key in the file data that represents the file name
-    cell: (info) => (
-      <a href={info.row.original.url} target="_blank" rel="noopener noreferrer">
-        {info.getValue()}
-      </a>
-    ),
+    accessorKey: "title", 
+    cell: (info) => info.getValue(),
   },
   {
-    header: "File Type",
-    accessorKey: "type", // The key in the file data that represents the file type (e.g., image, pdf)
+    header: "Owner",
+    accessorKey: "owner",
+    cell: (info) => info.getValue(),
+  },
+  {
+    header: "Description",
+    accessorKey: "description",
     cell: (info) => info.getValue(),
   },
   {
     header: "Upload Date",
-    accessorKey: "createdAt", // The key in the file data that represents the file upload date
+    accessorKey: "Created",
     cell: (info) => {
       const date = new Date(info.getValue());
       return format(date, "yyyy-MM-dd HH:mm");
     },
-  },
-  {
-    header: "Favorites",
-    accessorKey: "isFavorited", // Assuming this is a boolean field that indicates if the file is marked as a favorite
-    cell: (info) => (info.getValue() ? "⭐" : "☆"),
   },
   {
     header: "Actions",
