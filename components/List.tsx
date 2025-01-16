@@ -86,7 +86,7 @@ const PublicationList = () => {
               className="flex flex-col border-b pb-6 last:border-none lg:flex-row lg:items-start lg:space-x-4"
             >
               <div className="flex-1">
-                <h2 className="hover:underline sm:text-lg text-blue-600 text-base font-medium">
+                <h2 className="text-blue-600 text-base font-medium hover:underline sm:text-lg">
                   {pub.$id ? (
                     <a href={pub.$id} target="_blank" rel="noopener noreferrer">
                       {pub.title}
@@ -96,9 +96,9 @@ const PublicationList = () => {
                   )}
                 </h2>
 
-                <p className="text-sm text-gray-600 mb-1">
+                <p className="mb-1 text-sm text-gray-600">
                   Athour: {pub.owner.fullName}{' '}
-                  <span className="block md:inline px-6">
+                  <span className="block px-6 md:inline">
                     {' '}
                     Created At: {new Date(pub.$createdAt).toLocaleDateString()}
                   </span>
@@ -106,7 +106,7 @@ const PublicationList = () => {
 
                 {pub.description && (
                   <Link href={`home/${pub.title}`}>
-                    <p className="hover:cursor-pointer mb-2 text-sm max-w-[800px] text-gray-700">
+                    <p className="mb-2 max-w-[800px] text-sm text-gray-700 hover:cursor-pointer">
                       {pub.description} {truncateString(ExtractedText, 225)}
                     </p>
                   </Link>
@@ -116,24 +116,24 @@ const PublicationList = () => {
                 <p className="text-xs italic text-gray-500">{pub.source}</p>
               )} */}
 
-                <div className="flex flex-wrap gap-4 mt-2 text-xs text-gray-500  ">
-                  <span className="cursor-pointer hover:underline font-bold">
+                <div className="mt-2 flex flex-wrap gap-4 text-xs text-gray-500  ">
+                  <span className="cursor-pointer font-bold hover:underline">
                     Save
                   </span>
-                  <span className="cursor-pointer hover:underline font-bold">
+                  <span className="cursor-pointer font-bold hover:underline">
                     {' '}
-                    <TextAlignCenterIcon className="inline font-bold text-4xl" />{' '}
+                    <TextAlignCenterIcon className="inline text-4xl font-bold" />{' '}
                     Cite
                   </span>
                   {
-                    <span className="hover:underline font-bold">
+                    <span className="font-bold hover:underline">
                       Cited by {pub.citationCount}
                     </span>
                   }
                   {
                     <a
                       href={''}
-                      className="hover:underline text-blue-600"
+                      className="text-blue-600 hover:underline"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -144,7 +144,7 @@ const PublicationList = () => {
               </div>
 
               {
-                <div className="mt-4 lg:mt-0 lg:ml-auto">
+                <div className="mt-4 lg:ml-auto lg:mt-0">
                   <a
                     href={constructDownloadUrl(pub.fileId)}
                     target="_blank"
@@ -152,7 +152,7 @@ const PublicationList = () => {
                   >
                     <Button
                       variant="destructive"
-                      className="text-sm text-white bg-rose-400 hover:bg-rose-500 px-4 py-1 rounded shadow-md w-full md:w-auto"
+                      className="w-full rounded bg-rose-400 px-4 py-1 text-sm text-white shadow-md hover:bg-rose-500 md:w-auto"
                     >
                       Download
                     </Button>
