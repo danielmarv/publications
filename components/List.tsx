@@ -3,10 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import Link from 'next/link';
-import { listPublications } from '@/lib/actions/pubs.actions';
+import { listPublications, UpdateCiteCount } from '@/lib/actions/pubs.actions';
 import { constructDownloadUrl, constructFileUrl } from '@/lib/utils';
 import mammoth from 'mammoth';
 import { TextAlignCenterIcon } from '@radix-ui/react-icons';
+import CiteModal from './CiteModal';
 
 type Publication = {
   title: string;
@@ -32,15 +33,13 @@ type Publication = {
   review: string[];
   status: string;
   tags: string[];
+  extractedText:string;
 };
 
-const truncateString = (text: string, maxLength: number): string => {
-  return text.length > maxLength ? text.slice(0, maxLength) + ' . . .' : text;
-};
 
 const PublicationList = () => {
   const [publications, setpublications] = useState<Publication[]>([]);
-  const [ExtractedText, setExtractedText] = useState('');
+  const [active, Setactive] = useState<string | null>(null);
   // const download = constructDownloadUrl()
   useEffect(() => {
     const handleGetPublications = async () => {
@@ -49,6 +48,7 @@ const PublicationList = () => {
           searchText: '',
           limit: 10,
         });
+        console.log(publication)
         setpublications(publication);
       } catch (error) {
         console.error('Error fetching publications:', error);
@@ -58,21 +58,39 @@ const PublicationList = () => {
     handleGetPublications();
   }, []);
   useEffect(() => {
-    const handleExtractedData = async () => {
-      try {
-        const fileUrl = await constructFileUrl(publications[0].fileId);
-        const response = await fetch(fileUrl);
-        const arrayBuffer = await response.arrayBuffer();
-        const result = await mammoth.extractRawText({ arrayBuffer });
-        setExtractedText(result.value);
-        console.log(ExtractedText);
-      } catch (error) {
-        console.error('Error reading file:', error);
-      }
-    };
-    handleExtractedData();
-  });
+        const handleExtractedData = async () => {
+          try {
+            for (const publication of publications) {
+              if (publication.fileId) {
+                const fileUrl = constructFileUrl(publication.fileId);
+                const response = await fetch(fileUrl);
+                const arrayBuffer = await response.arrayBuffer();
+                const result = await mammoth.extractRawText({ arrayBuffer });
+                setpublications((prevPublications) =>
+                  prevPublications.map((pub) =>
+                    pub.fileId === publication.fileId
+                      ? { ...pub, extractedText: result.value.slice(0,255)+" . . . " }
+                      : pub
+                  )
+                );
+                // console.log(result.value); 
+              }
+            }
+          } catch (error) {
+            console.error("Error reading file:", error);
+          }
+        };
+        handleExtractedData();
+      }, [publications]);
 
+      const handleCiteModal = (pub_Id: string)=>{
+        UpdateCiteCount(pub_Id)
+        Setactive(pub_Id)
+      }
+      const handleClose = ()=>{
+        Setactive(null)
+      }
+      
   return (
     <div className="mx-auto max-w-6xl p-4 sm:p-6 md:p-8">
       <h1 className="mb-6 text-center text-xl font-semibold sm:text-2xl md:text-left">
@@ -112,9 +130,9 @@ const PublicationList = () => {
                   </Link>
                 )}
 
-                {/* {pub.source && (
-                <p className="text-xs italic text-gray-500">{pub.source}</p>
-              )} */}
+                {
+                        active && (<CiteModal handleClose={handleClose} pub_Id={active} />)
+                }
 
                 <div className="mt-2 flex flex-wrap gap-4 text-xs text-gray-500  ">
                   <span className="cursor-pointer font-bold hover:underline">

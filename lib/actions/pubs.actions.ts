@@ -418,3 +418,28 @@ export const sharePublication = async ({
     return null; // Return null in case of error
   }
 };
+export const GetPublicationById = async (pub_Id: string) =>{
+        const { databases } = await createAdminClient();
+        const publication = await databases.getDocument(
+                appwriteConfig.databaseId,
+                appwriteConfig.publicationCollectionId,
+                pub_Id);
+                return publication;
+                }
+
+export const UpdateCiteCount = async(pub_Id:string,) =>{
+        const { databases } = await createAdminClient();
+        const publication = await databases.getDocument(
+                appwriteConfig.databaseId,
+                appwriteConfig.publicationCollectionId,
+                pub_Id
+              );
+              const CiteCount = (publication.citationCount || 0) + 1;
+                const UpdatePublication = await databases.updateDocument(
+                        appwriteConfig.databaseId,
+                        appwriteConfig.publicationCollectionId,
+                        pub_Id,
+                        { citationCount: CiteCount },
+                )
+                return UpdatePublication;
+}
