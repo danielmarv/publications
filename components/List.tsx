@@ -104,7 +104,7 @@ const PublicationList = () => {
               className="flex flex-col border-b pb-6 last:border-none lg:flex-row lg:items-start lg:space-x-4"
             >
               <div className="flex-1">
-                <h2 className="text-blue-600 text-base font-medium hover:underline sm:text-lg">
+                <h2 className="hover:underline sm:text-lg text-blue-600 text-base font-medium">
                   {pub.$id ? (
                     <a href={pub.$id} target="_blank" rel="noopener noreferrer">
                       {pub.title}
@@ -114,9 +114,9 @@ const PublicationList = () => {
                   )}
                 </h2>
 
-                <p className="mb-1 text-sm text-gray-600">
+                <p className="text-sm text-gray-600 mb-1">
                   Athour: {pub.owner.fullName}{' '}
-                  <span className="block px-6 md:inline">
+                  <span className="block md:inline px-6">
                     {' '}
                     Created At: {new Date(pub.$createdAt).toLocaleDateString()}
                   </span>
@@ -124,8 +124,8 @@ const PublicationList = () => {
 
                 {pub.description && (
                   <Link href={`home/${pub.title}`}>
-                    <p className="mb-2 max-w-[800px] text-sm text-gray-700 hover:cursor-pointer">
-                      {pub.description} {truncateString(ExtractedText, 225)}
+                    <p className="hover:cursor-pointer mb-2 text-sm max-w-[800px] text-gray-700">
+                      {pub.description} {pub.extractedText}
                     </p>
                   </Link>
                 )}
@@ -134,24 +134,25 @@ const PublicationList = () => {
                         active && (<CiteModal handleClose={handleClose} pub_Id={active} />)
                 }
 
-                <div className="mt-2 flex flex-wrap gap-4 text-xs text-gray-500  ">
-                  <span className="cursor-pointer font-bold hover:underline">
+                <div className="flex flex-wrap gap-4 mt-2 text-xs text-gray-500  ">
+                  <span className="cursor-pointer hover:underline font-bold">
                     Save
                   </span>
-                  <span className="cursor-pointer font-bold hover:underline">
+
+                  <span onClick={()=>handleCiteModal(pub.$id)} className="cursor-pointer hover:underline font-bold">
                     {' '}
-                    <TextAlignCenterIcon className="inline text-4xl font-bold" />{' '}
+                    <TextAlignCenterIcon className="inline font-bold text-4xl" />{' '}
                     Cite
                   </span>
                   {
-                    <span className="font-bold hover:underline">
+                    <span className="hover:underline font-bold">
                       Cited by {pub.citationCount}
                     </span>
                   }
                   {
                     <a
                       href={''}
-                      className="text-blue-600 hover:underline"
+                      className="hover:underline text-blue-600"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -162,7 +163,7 @@ const PublicationList = () => {
               </div>
 
               {
-                <div className="mt-4 lg:ml-auto lg:mt-0">
+                <div className="mt-4 lg:mt-0 lg:ml-auto">
                   <a
                     href={constructDownloadUrl(pub.fileId)}
                     target="_blank"
@@ -170,7 +171,7 @@ const PublicationList = () => {
                   >
                     <Button
                       variant="destructive"
-                      className="w-full rounded bg-rose-400 px-4 py-1 text-sm text-white shadow-md hover:bg-rose-500 md:w-auto"
+                      className="text-sm text-white bg-rose-400 hover:bg-rose-500 px-4 py-1 rounded shadow-md w-full md:w-auto"
                     >
                       Download
                     </Button>
