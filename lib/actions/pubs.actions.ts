@@ -194,7 +194,13 @@ export const addReview = async ({
 
     // Check if the current user has already reviewed this publication
     const existingReviews = publication.review || [];
-    for (const reviewId of existingReviews) {
+
+    // Extract valid review IDs from the review objects
+    const validReviewIds = existingReviews
+      .map((review) => review?.$id)
+      .filter((id) => typeof id === "string" && /^[a-zA-Z0-9_]{1,36}$/.test(id));
+    
+    for (const reviewId of validReviewIds) {
       const review = await databases.getDocument(
         appwriteConfig.databaseId,
         appwriteConfig.reviewCollectionId,
@@ -222,11 +228,19 @@ export const addReview = async ({
     // Add the new review ID to the publication's "review" field
     const updatedReviews = [...existingReviews, newReview.$id];
 
+    // Update the publication with the new review list
+    const updates = { review: updatedReviews };
+
+    // Check if the number of reviews reaches 3
+    if (updatedReviews.length >= 2) {
+      updates["status"] = "Approved"; // Automatically approve the publication
+    }
+
     await databases.updateDocument(
       appwriteConfig.databaseId,
       appwriteConfig.publicationCollectionId,
       publicationId,
-      { review: updatedReviews }
+      updates
     );
 
     return true; // Indicate success

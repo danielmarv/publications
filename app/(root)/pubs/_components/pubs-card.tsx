@@ -82,7 +82,7 @@ const Card = ({ publication, role, name }: PublicationCardProps) => {
 
         {/* Reviews Section */}
         {publication.review.length > 0 ? (
-          <div className="caption line-clamp-1 text-light-200">
+          <div className="caption line-clamp-4 text-light-200">
             Reviews ({publication.review.length}):{' '}
             {publication.review
               .map((review) => review.name)
