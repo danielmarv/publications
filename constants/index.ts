@@ -32,7 +32,7 @@ export const navItems = [
   {
     name: 'Departments',
     icon: '/assets/icons/others.svg',
-    url: '/others',
+    url: '/department',
   },
   {
     name: 'Users',
