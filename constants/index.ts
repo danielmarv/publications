@@ -90,6 +90,19 @@ export const approveItems = [
   },
 ];
 
+export const adminItems = [
+  {
+    label: 'Submit Review',
+    icon: '/assets/icons/info.svg',
+    value: 'review',
+  },
+  {
+    label: 'Approve',
+    icon: '/assets/icons/info.svg',
+    value: 'approve',
+  },
+];
+
 export const sortTypes = [
   {
     label: 'Date created (newest)',
