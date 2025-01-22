@@ -10,8 +10,8 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: "StoreIt",
-  description: "StoreIt - The only storage solution you need.",
+  title: "Bugema University Publications",
+  description: "Bugema University Publications is a platform for sharing research and academic work from Bugema University.",
 };
 
 export default function RootLayout({

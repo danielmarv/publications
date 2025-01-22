@@ -32,7 +32,7 @@ export const navItems = [
   {
     name: 'Departments',
     icon: '/assets/icons/others.svg',
-    url: '/others',
+    url: '/department',
   },
   {
     name: 'Users',
@@ -83,6 +83,19 @@ export const reviewItems = [
 ];
 
 export const approveItems = [
+  {
+    label: 'Approve',
+    icon: '/assets/icons/info.svg',
+    value: 'approve',
+  },
+];
+
+export const adminItems = [
+  {
+    label: 'Submit Review',
+    icon: '/assets/icons/info.svg',
+    value: 'review',
+  },
   {
     label: 'Approve',
     icon: '/assets/icons/info.svg',

@@ -18,7 +18,7 @@ import {
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { reviewItems, approveItems } from '@/constants';
+import { reviewItems, approveItems, adminItems } from '@/constants';
 import { Button } from '@/components/ui/button';
 import { addReview, updatePublication } from '@/lib/actions/pubs.actions';
 
@@ -146,6 +146,34 @@ const ActionDropdown = ({
             {publication.title}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
+          {role === 'admin' && (
+            <div>
+              {adminItems.map((actionItem) => (
+                <DropdownMenuItem
+                  key={actionItem.value}
+                  className="shad-dropdown-item"
+                  onClick={() => {
+                    setAction(actionItem);
+
+                    if (['review', 'approve'].includes(actionItem.value)) {
+                      setIsModalOpen(true);
+                    }
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src={actionItem.icon}
+                      alt={actionItem.label}
+                      width={30}
+                      height={30}
+                    />
+                    {actionItem.label}
+                  </div>
+                </DropdownMenuItem>
+              ))}
+            </div>
+          )}
+
           {role === 'reviewer' && (
             <div>
               {reviewItems.map((actionItem) => (
