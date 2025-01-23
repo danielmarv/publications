@@ -123,7 +123,7 @@ const PublicationList = () => {
                 </p>
 
                 {pub.description && (
-                  <Link href={`home/${pub.title}`}>
+                  <Link href={`home/${pub.$id}`}>
                     <p className="hover:cursor-pointer mb-2 text-sm max-w-[800px] text-gray-700">
                       {pub.description} {pub.extractedText}
                     </p>

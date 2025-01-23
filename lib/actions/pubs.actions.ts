@@ -438,6 +438,7 @@ export const GetPublicationById = async (pub_Id: string) =>{
                 appwriteConfig.databaseId,
                 appwriteConfig.publicationCollectionId,
                 pub_Id);
+                // console.log("publication is:", publication)
                 return publication;
                 }
 

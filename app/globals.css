@@ -172,7 +172,7 @@
     @apply mx-auto max-w-7xl px-5;
   }
   .primary-btn {
-    @apply bg-brand hover:bg-brand-100 transition-all rounded-full button !important;
+    @apply bg-blue-100 hover:bg-blue transition-all rounded-full button !important;
   }
   .flex-center {
     @apply flex items-center justify-center;
@@ -357,13 +357,13 @@
 
   /* Chart */
   .chart {
-    @apply flex items-center rounded-[20px] bg-brand p-5 text-white md:flex-col xl:flex-row !important;
+    @apply flex items-center rounded-[20px] bg-blue-100 p-5 text-white md:flex-col xl:flex-row !important;
   }
   .chart-container {
     @apply mx-auto aspect-square w-[180px] text-white xl:w-[250px] !important;
   }
   .polar-grid {
-    @apply first:fill-white/20 last:fill-brand !important;
+    @apply first:fill-white/20 last:fill-blue !important;
   }
   .chart-details {
     @apply flex-1 items-start px-3 py-0 sm:px-5 lg:p-3 xl:pr-5 !important;
@@ -470,7 +470,7 @@
   }
 
   .shad-active {
-    @apply bg-brand text-white shadow-drop-2 !important;
+    @apply bg-blue text-white shadow-drop-2 !important;
   }
 
   /* Sort */
