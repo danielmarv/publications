@@ -14,10 +14,13 @@ const config: Config = {
   				'100': '#EA6365',
   				DEFAULT: '#FA7275'
   			},
-  			red: '#FF7474',
+  			red: '#B31F24',
   			error: '#b80000',
   			green: '#3DD9B3',
-  			blue: '#56B8FF',
+  			blue:{
+                                '100': '#0080FF',
+                                DEFAULT: '#050A68'
+                        }, 
   			pink: '#EEA8FD',
   			orange: '#F9AB72',
   			light: {
