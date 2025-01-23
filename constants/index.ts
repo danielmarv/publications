@@ -2,42 +2,42 @@ export const navItems = [
   {
     name: 'Dashboard',
     icon: '/assets/icons/dashboard.svg',
-    url: '/',
+    url: '/dashboard',
   },
   {
     name: 'Documents',
     icon: '/assets/icons/documents.svg',
-    url: '/documents',
+    url: '/dashboard/documents',
   },
   {
     name: 'Drafts',
     icon: '/assets/icons/others.svg',
-    url: '/drafts',
+    url: '/dashboard/drafts',
   },
   {
     name: 'Publications',
     icon: '/assets/icons/images.svg',
-    url: '/pubs',
+    url: '/dashboard/pubs',
   },
   {
     name: 'Comments',
     icon: '/assets/icons/video.svg',
-    url: '/media',
+    url: '/dashboard/media',
   },
   {
     name: 'Write',
     icon: '/assets/icons/others.svg',
-    url: '/others',
+    url: '/dashboard/others',
   },
   {
     name: 'Departments',
     icon: '/assets/icons/others.svg',
-    url: '/department',
+    url: '/dashboard/department',
   },
   {
     name: 'Users',
     icon: '/assets/icons/others.svg',
-    url: '/others',
+    url: '/dashboard/others',
   },
 ];
 
