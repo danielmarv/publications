@@ -1,5 +1,7 @@
+"use client"
+
 import Link from "next/link"
-import { signOutUser } from "@/lib/actions/user.actions"
+import { useRouter } from "next/navigation"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,24 +11,36 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { signOutUser } from "@/lib/actions/user.actions"
+
+type Role = "guest" | "author" | "reviewer" | "approver" | "admin"
 
 interface UserMenuProps {
   user: {
-    name?: string | null
+    fullName?: string | null
     email?: string | null
-    image?: string | null
-    isAdmin?: boolean
+    avatar?: string | null
+    role: Role
   }
 }
 
 export function UserMenu({ user }: UserMenuProps) {
+  const router = useRouter()
+
+  const handleSignOut = async () => {
+    await signOutUser()
+    router.push("/sign-in")
+  }
+
+  const showDashboard = user.role !== "guest"
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={user.image || ""} alt={user.name || ""} />
-            <AvatarFallback>{user.name?.[0]}</AvatarFallback>
+            <AvatarImage src={user.avatar || ""} alt={user.fullName || ""} />
+            <AvatarFallback>{user.fullName?.[0]}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -37,23 +51,14 @@ export function UserMenu({ user }: UserMenuProps) {
         <DropdownMenuItem asChild>
           <Link href="/my-library">My Library</Link>
         </DropdownMenuItem>
-        {user.isAdmin && (
+        {showDashboard && (
           <DropdownMenuItem asChild>
             <Link href="/dashboard">Dashboard</Link>
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onSelect={(event) => {
-            event.preventDefault()
-            signOutUser()
-          }}
-        >
-          Sign out
-        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={handleSignOut}>Sign out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
 }
-
