@@ -1,12 +1,12 @@
+'use client';
 import { Suspense } from "react"
-import { ArticleCard } from "@/components/article-card"
-import { FilterSidebar } from "@/components/filter-sidebar"
-import { SortDropdown } from "@/components/sort-dropdown"
-import { getArticles, getCategories } from "@/lib/articles" // You'll need to implement these functions
+import { ArticleCard } from "./components/article-card"
+import { FilterSidebar } from "./components/filter-sidebar"
+import { SortDropdown } from "./components/sort-dropdown"
 
 export default async function ArticlesPage() {
-  const articles = await getArticles()
-  const categories = await getCategories()
+  const articles = []
+  const categories = []
 
   return (
     <div className="container mx-auto py-8">
