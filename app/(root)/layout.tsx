@@ -1,9 +1,11 @@
 import { Inter } from 'next/font/google';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { MainNav } from '@/components/MainNav';
+import { getCurrentUser } from "@/lib/actions/user.actions";
+import { redirect } from "next/navigation";
 
 import '../../app/globals.css';
-import HomeHeader from '@/components/HomeHeader';
+import {HomeHeader} from '@/components/HomeHeader';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -12,11 +14,14 @@ export const metadata = {
   description: 'A scholarly search interface',
 };
 
-export default function RootLayout({
+ export const RootLayout = async ({
   children,
 }: {
   children: React.ReactNode;
-}) {
+}) => {
+  const currentUser = await getCurrentUser();
+  
+    if (!currentUser) return redirect("/sign-in");
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -35,3 +40,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+export default RootLayout;
