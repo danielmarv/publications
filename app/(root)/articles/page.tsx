@@ -54,11 +54,13 @@ export default function ArticlesPage() {
               }}
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {articles.map((article) => (
-              <ArticleCard key={article.id} {...article} />
-            ))}
-          </div>
+          <Suspense fallback={<div>Loading articles...</div>}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {articles.map((article) => (
+                <ArticleCard key={article.id} {...article} />
+              ))}
+            </div>
+          </Suspense>
         </main>
       </div>
     </div>
