@@ -224,16 +224,12 @@ export const addReview = async ({
         publication: publicationId,
       }
     );
-
-    // Add the new review ID to the publication's "review" field
     const updatedReviews = [...existingReviews, newReview.$id];
 
-    // Update the publication with the new review list
     const updates = { review: updatedReviews };
 
-    // Check if the number of reviews reaches 3
     if (updatedReviews.length >= 2) {
-      updates["status"] = "Approved"; // Automatically approve the publication
+      updates["status"] = "Approved";
     }
 
     await databases.updateDocument(
@@ -243,10 +239,10 @@ export const addReview = async ({
       updates
     );
 
-    return true; // Indicate success
+    return true;
   } catch (error) {
     console.error("Failed to add review:", error);
-    return false; // Indicate failure
+    return false;
   }
 };
 
@@ -378,7 +374,7 @@ export const updatePublicationUsers = async ({
     return parseStringify(updatedPublication);
   } catch (error) {
     handleError(error, 'Failed to update publication users');
-    return null; // Return null in case of error
+    return null; 
   }
 };
 
@@ -404,7 +400,7 @@ export const renamePublication = async ({
     return parseStringify(updatedPublication);
   } catch (error) {
     handleError(error, 'Failed to rename publication');
-    return null; // Return null in case of error
+    return null;
   }
 };
 
@@ -429,32 +425,32 @@ export const sharePublication = async ({
     return parseStringify(updatedPublication);
   } catch (error) {
     handleError(error, 'Failed to share publication');
-    return null; // Return null in case of error
+    return null;
   }
 };
 export const GetPublicationById = async (pub_Id: string) =>{
-        const { databases } = await createAdminClient();
-        const publication = await databases.getDocument(
-                appwriteConfig.databaseId,
-                appwriteConfig.publicationCollectionId,
-                pub_Id);
-                // console.log("publication is:", publication)
-                return publication;
-                }
+  const { databases } = await createAdminClient();
+  const publication = await databases.getDocument(
+    appwriteConfig.databaseId,
+    appwriteConfig.publicationCollectionId,
+    pub_Id
+  );
+  return publication;
+  }
 
 export const UpdateCiteCount = async(pub_Id:string,) =>{
-        const { databases } = await createAdminClient();
-        const publication = await databases.getDocument(
-                appwriteConfig.databaseId,
-                appwriteConfig.publicationCollectionId,
-                pub_Id
-              );
-              const CiteCount = (publication.citationCount || 0) + 1;
-                const UpdatePublication = await databases.updateDocument(
-                        appwriteConfig.databaseId,
-                        appwriteConfig.publicationCollectionId,
-                        pub_Id,
-                        { citationCount: CiteCount },
-                )
-                return UpdatePublication;
+  const { databases } = await createAdminClient();
+  const publication = await databases.getDocument(
+    appwriteConfig.databaseId,
+    appwriteConfig.publicationCollectionId,
+    pub_Id
+  );
+  const CiteCount = (publication.citationCount || 0) + 1;
+    const UpdatePublication = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.publicationCollectionId,
+            pub_Id,
+            { citationCount: CiteCount },
+    )
+    return UpdatePublication;
 }
