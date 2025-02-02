@@ -4,9 +4,30 @@ import { ArticleCard } from "./components/article-card"
 import { FilterSidebar } from "./components/filter-sidebar"
 import { SortDropdown } from "./components/sort-dropdown"
 
-export default async function ArticlesPage() {
-  const articles = []
-  const categories = []
+export default function ArticlesPage() {
+  interface Article {
+    id: string;
+    title: string;
+    content: string;
+    excerpt: string;
+    category: string;
+    date: string;
+    author: string;
+  };
+  const articles: Article[] = [
+    {
+      id: "1",
+      title: "Sample Article",
+      content: "This is a sample article.",
+      excerpt: "This is a sample excerpt.",
+      category: "Category 1",
+      date: "2023-01-01",
+      author: "Author 1"
+    }
+  ]
+
+  const categories: string[] = []
+
 
   return (
     <div className="container mx-auto py-8">
