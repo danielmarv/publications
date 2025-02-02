@@ -1,8 +1,6 @@
 import { Inter } from 'next/font/google';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { MainNav } from '@/components/MainNav';
-import { getCurrentUser } from "@/lib/actions/user.actions";
-import { redirect } from "next/navigation";
 
 import '../../app/globals.css';
 import {HomeHeader} from '@/components/HomeHeader';
@@ -14,14 +12,12 @@ export const metadata = {
   description: 'A scholarly search interface',
 };
 
- export const RootLayout = async ({
+const RootLayout = async ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const currentUser = await getCurrentUser();
-  
-    if (!currentUser) return redirect("/sign-in");
+
   return (
     <html lang="en">
       <body className={inter.className}>
