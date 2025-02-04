@@ -4,17 +4,11 @@ import { Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { UserMenu } from "./user-menu"
+import { getCurrentUser } from "@/lib/actions/user.actions"
 
-interface HomeHeaderProps {
-  currentUser?: {
-    name?: string | null
-    email?: string | null
-    image?: string | null
-    isAdmin?: boolean
-  } | null
-}
+export async function HomeHeader() {
+  const currentUser = await getCurrentUser()
 
-export function HomeHeader({ currentUser }: HomeHeaderProps) {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center justify-between space-x-4">

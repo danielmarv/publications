@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LibraryPage = async () => {
+const LibraryPage = () => {
 
   return (
     <div className="w-full px-5">
