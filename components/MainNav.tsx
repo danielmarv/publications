@@ -23,11 +23,6 @@ const mainNavItems = [
     icon: HomeIcon,
   },
   {
-    title: "Articles",
-    href: "/articles",
-    icon: FileText,
-  },
-  {
     title: "Profiles",
     href: "/profiles",
     icon: Users,
