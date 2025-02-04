@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ArticlesPage = () => {
+const ArticlesPage = async () => {
   return (
     <div className="w-full px-5">
       <h2 className="text-xl font-semibold">Articles Page</h2>
