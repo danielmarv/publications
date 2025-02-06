@@ -13,6 +13,10 @@ const handleError = (error: unknown, message: string) => {
   throw error;
 };
 
+interface GetFileProps {
+  fileId: string;
+}
+
 export const uploadFile = async ({
   file,
   ownerId,
@@ -250,7 +254,7 @@ export async function getTotalSpaceUsed() {
       audio: { size: 0, latestDate: '' },
       other: { size: 0, latestDate: '' },
       used: 0,
-      all: 2 * 1024 * 1024 * 1024 /* 2GB available bucket storage */,
+      all: 2 * 1024 * 1024 * 1024 ,
     };
 
     files.documents.forEach((file) => {
@@ -271,3 +275,27 @@ export async function getTotalSpaceUsed() {
     handleError(error, 'Error calculating total space used:, ');
   }
 }
+
+export const getFileByBucketId = async (bucketFileId: string) => {
+  try {
+    if (!bucketFileId) throw new Error("Bucket File ID is missing");
+
+    const { databases } = await createAdminClient();
+
+    const response = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      [Query.equal("bucketFileId", bucketFileId)]
+    );
+
+    if (response.total === 0) throw new Error("No file found with this bucketFileId");
+
+    const file = response.documents[0];
+
+    return file;
+  } catch (error) {
+    console.error("Error fetching file by bucketFileId:", error);
+    throw new Error("File not found in database.");
+  }
+};
+

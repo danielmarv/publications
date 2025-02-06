@@ -31,6 +31,9 @@ export function UserMenu({ user }: UserMenuProps) {
     await signOutUser()
     router.push("/sign-in")
   }
+  const handleDashboard = async () => {
+    await router.push("/dashboard")
+  }
 
   const showDashboard = user.role !== "guest"
 
@@ -53,7 +56,10 @@ export function UserMenu({ user }: UserMenuProps) {
         </DropdownMenuItem>
         {showDashboard && (
           <DropdownMenuItem asChild>
-            <Link href="/dashboard">Dashboard</Link>
+            {/* <Link href="/dashboard">Dashboard</Link> */}
+            <Button variant="ghost" className="cursor-pointer" onClick={handleDashboard}>
+              Go to dashboard
+            </Button>
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
