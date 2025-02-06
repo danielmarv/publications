@@ -66,7 +66,7 @@ const Card = ({ publication, role, name }: PublicationCardProps) => {
         <div className="flex justify-between">
           <Thumbnail
             type={publication.status}
-            extension={publication.title.split(".").pop() || ""}
+            extension={file?.extension}
             url={`${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${process.env.NEXT_PUBLIC_APPWRITE_BUCKET}/files/${publication.fileId}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT}`}
             className="!size-20"
             imageClassName="!size-11"
