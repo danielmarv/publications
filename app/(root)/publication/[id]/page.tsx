@@ -16,10 +16,6 @@ const PublicationDetails = ({ params }: PageProps) => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const getFileExtension = (url: string) => {
-    return url.split(".").pop()?.toLowerCase() || "Unknown"
-  }
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
