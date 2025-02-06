@@ -173,7 +173,7 @@ export const undraftDocument = async (fileId: string) => {
       appwriteConfig.databaseId,
       appwriteConfig.filesCollectionId,
       fileId,
-      { drafted: false } // Set drafted to false
+      { drafted: false }
     );
     return updatedFile;
   } catch (error) {
@@ -231,7 +231,6 @@ export const deleteFile = async ({
   }
 };
 
-// ============================== TOTAL FILE SPACE USED
 export async function getTotalSpaceUsed() {
   try {
     const { databases } = await createSessionClient();

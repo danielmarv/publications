@@ -1,31 +1,40 @@
-import React from "react";
-import Sidebar from "@/components/Sidebar";
-import MobileNavigation from "@/components/MobileNavigation";
-import Header from "@/components/Header";
-import { getCurrentUser } from "@/lib/actions/user.actions";
-import { redirect } from "next/navigation";
-import { Toaster } from "@/components/ui/toaster";
+import { Inter } from 'next/font/google';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { MainNav } from '@/components/MainNav';
 
-export const dynamic = "force-dynamic";
+import '../../app/globals.css';
+import {HomeHeader} from '@/components/HomeHeader';
 
-const Layout = async ({ children }: { children: React.ReactNode }) => {
-  const currentUser = await getCurrentUser();
-//   console.log(currentUser)
+const inter = Inter({ subsets: ['latin'] });
 
-  if (!currentUser) return redirect("/sign-in");
+export const metadata = {
+  title: 'BU Scholar',
+  description: 'A scholarly search interface',
+};
+
+const RootLayout = async ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
 
   return (
-    <main className="flex h-screen">
-      <Sidebar {...currentUser} />
-
-      <section className="flex h-full flex-1 flex-col">
-        <MobileNavigation {...currentUser} />
-        <Header userId={currentUser.$id} accountId={currentUser.accountId} />
-        <div className="main-content">{children}</div>
-      </section>
-
-      <Toaster />
-    </main>
+    <html lang="en">
+      <body className={inter.className}>
+        <SidebarProvider>
+          <div className="relative flex min-h-screen w-full flex-col">
+            <HomeHeader />
+            <div className="flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+              <MainNav />
+              <main className="relative w-full py-6">
+                {children}
+              </main>
+            </div>
+          </div>
+        </SidebarProvider>
+      </body>
+    </html>
   );
-};
-export default Layout;
+}
+
+export default RootLayout;

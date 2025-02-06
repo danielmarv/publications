@@ -1,47 +1,52 @@
-'use client';
+import Link from "next/link"
+import { Search } from "lucide-react"
 
-import Link from 'next/link';
-import { Search, User, Star } from 'lucide-react';
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { UserMenu } from "./user-menu"
+import { getCurrentUser } from "@/lib/actions/user.actions"
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+export async function HomeHeader() {
+  const currentUser = await getCurrentUser()
 
-export default function HomeHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center justify-between space-x-8">
-        <div className="mr-4 flex items-center space-x-2">
-          <Link href="/home" className="flex items-center space-x-2">
-            <span className="text-xl font-bold">BU Publications</span>
-          </Link>
-        </div>
-        <div className="flex flex-1 items-center space-x-2">
-          <div className="flex w-full max-w-2xl items-center space-x-2">
+      <div className="container flex h-14 items-center justify-between space-x-4">
+        <Link href="/home" className="flex items-center space-x-2">
+          <span className="text-xl font-bold">BU Publications</span>
+        </Link>
+        <div className="flex flex-1 items-center justify-end space-x-4">
+          <form className="flex w-full max-w-sm items-center space-x-2" action="/search">
             <Input
               type="search"
+              name="q"
               placeholder="Search..."
-              className="h-9 md:w-[300px] lg:w-[500px]"
+              className="h-9 w-[300px] lg:w-[300px]"
+              aria-label="Search publications"
             />
-            <Button type="submit" size="sm" className="h-9">
-              <Search className="size-4" />
+            <Button type="submit" size="sm" className="h-9" aria-label="Submit search">
+              <Search className="h-4 w-4" />
             </Button>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Link href="/my-profile">
-              <Button variant="ghost" size="lg">
-                <User />
-                My profile
-              </Button>
-            </Link>
-            <Link href="/my-library">
-              <Button variant="ghost" size="lg">
-                <Star />
-                My library
-              </Button>
-            </Link>
-          </div>
+          </form>
+          <nav className="flex items-center space-x-2">
+            {currentUser ? (
+              <UserMenu user={currentUser} />
+            ) : (
+              <>
+                <Link href="/sign-in">
+                  <Button variant="ghost" size="sm">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/sign-up">
+                  <Button size="sm">Sign Up</Button>
+                </Link>
+              </>
+            )}
+          </nav>
         </div>
       </div>
     </header>
-  );
+  )
 }
+

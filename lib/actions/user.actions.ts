@@ -156,29 +156,29 @@ export const getUsers = async () => {
 
 
 export const updateUserData = async (data: { [key: string]: any }) => {
-      const currentUser = await getCurrentUser();
-      console.log("current User is: ", currentUser);
-      const UserDocumentId = currentUser.$id;
-      // const { documents } = await currentUser.getDocuments();
-      const {databases} = await createAdminClient();
-      const result = await databases.updateDocument(
-            appwriteConfig.databaseId,
-            appwriteConfig.usersCollectionId,
-            UserDocumentId,
-            data
-            );
-            return result;
-            };
+  const currentUser = await getCurrentUser();
+  console.log("current User is: ", currentUser);
+  const UserDocumentId = currentUser.$id;
+  // const { documents } = await currentUser.getDocuments();
+  const {databases} = await createAdminClient();
+  const result = await databases.updateDocument(
+    appwriteConfig.databaseId,
+    appwriteConfig.usersCollectionId,
+    UserDocumentId,
+    data
+  );
+  return result;
+};
             
-      export const updateProfile = async(File: Blob | BinaryLike) =>{
-            const { storage } = await createAdminClient();
-            const inputFile = InputFile.fromBuffer(File, File.name);
-            const bucketFile = await storage.createFile(
-                  appwriteConfig.bucketId,
-                  ID.unique(),
-                  inputFile
-            );
-            await updateUserData({
-            avatar: constructFileUrl(bucketFile.$id), })
-            return bucketFile;
-      }
+export const updateProfile = async(File: Blob | BinaryLike) =>{
+  const { storage } = await createAdminClient();
+  const inputFile = InputFile.fromBuffer(File, File.name);
+  const bucketFile = await storage.createFile(
+    appwriteConfig.bucketId,
+    ID.unique(),
+    inputFile,
+  );
+  await updateUserData({
+  avatar: constructFileUrl(bucketFile.$id), })
+  return bucketFile;
+}
