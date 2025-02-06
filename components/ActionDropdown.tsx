@@ -112,7 +112,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                 onChange={(e) => setTitle(e.target.value)}
               />
               <Textarea
-                placeholder="Publication Description"
+                placeholder="Publication Abstract"
                 value={Description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="min-h-[100px]"
