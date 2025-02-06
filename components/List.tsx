@@ -106,7 +106,7 @@ const PublicationList = () => {
               <div className="flex-1">
                 <h2 className="hover:underline sm:text-lg text-blue-600 text-base font-medium">
                   {pub.$id ? (
-                    <a href={pub.$id} target="_blank" rel="noopener noreferrer">
+                    <a href={`/publication/${pub.$id}`} target="_blank" rel="noopener noreferrer">
                       {pub.title}
                     </a>
                   ) : (
@@ -123,7 +123,7 @@ const PublicationList = () => {
                 </p>
 
                 {pub.description && (
-                  <Link href={`home/${pub.$id}`}>
+                  <Link href={`/publication/${pub.$id}`}>
                     <p className="hover:cursor-pointer mb-2 text-sm max-w-[800px] text-gray-700">
                       {pub.description} {pub.extractedText}
                     </p>
