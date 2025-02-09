@@ -5,15 +5,16 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { UserMenu } from "./user-menu"
 import { getCurrentUser } from "@/lib/actions/user.actions"
-
+import Image from "next/image"
 export async function HomeHeader() {
   const currentUser = await getCurrentUser()
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center justify-between space-x-4">
-        <Link href="/home" className="flex items-center space-x-2">
-          <span className="text-xl font-bold">BU Publications</span>
+        <Link href="/" className="flex items-center space-x-2">
+          <Image src="/assets/icons/bu-small.png" alt="BU Publications Logo" width={50} height={50} />
+          <span className="text-xl font-bold">Bugema University Publications</span>
         </Link>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <form className="flex w-full max-w-sm items-center space-x-2" action="/search">

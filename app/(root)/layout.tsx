@@ -8,8 +8,8 @@ import {HomeHeader} from '@/components/HomeHeader';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'BU Scholar',
-  description: 'A scholarly search interface',
+  title: 'Bugema University Publications',
+  description: 'Bugema University Publications',
 };
 
 const RootLayout = async ({
