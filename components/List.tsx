@@ -40,7 +40,6 @@ type Publication = {
 const PublicationList = () => {
   const [publications, setpublications] = useState<Publication[]>([]);
   const [active, Setactive] = useState<string | null>(null);
-  // const download = constructDownloadUrl()
   useEffect(() => {
     const handleGetPublications = async () => {
       try {
@@ -73,7 +72,6 @@ const PublicationList = () => {
                       : pub
                   )
                 );
-                // console.log(result.value); 
               }
             }
           } catch (error) {
