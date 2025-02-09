@@ -8,6 +8,7 @@ import { constructDownloadUrl, constructFileUrl } from '@/lib/utils';
 import mammoth from 'mammoth';
 import { TextAlignCenterIcon } from '@radix-ui/react-icons';
 import CiteModal from './CiteModal';
+import { getCurrentUser } from '@/lib/actions/user.actions';
 
 type Publication = {
   title: string;
@@ -40,14 +41,16 @@ type Publication = {
 const PublicationList = () => {
   const [publications, setpublications] = useState<Publication[]>([]);
   const [active, Setactive] = useState<string | null>(null);
+  const [currentUser, setcurrentUser] = useState<any | null>(null);
   useEffect(() => {
     const handleGetPublications = async () => {
+      const currentUser = await getCurrentUser();
+      setcurrentUser(currentUser);
       try {
         const publication = await listPublications({
           searchText: '',
           limit: 10,
         });
-        console.log(publication)
         setpublications(publication);
       } catch (error) {
         console.error('Error fetching publications:', error);
@@ -159,9 +162,9 @@ const PublicationList = () => {
                   }
                 </div>
               </div>
-
               {
                 <div className="mt-4 lg:mt-0 lg:ml-auto">
+                {currentUser ? (
                   <a
                     href={constructDownloadUrl(pub.fileId)}
                     target="_blank"
@@ -174,7 +177,17 @@ const PublicationList = () => {
                       Download
                     </Button>
                   </a>
-                </div>
+                ) : (
+                  <Link href="/sign-in">
+                    <Button
+                      variant="destructive"
+                      className="text-sm text-white bg-rose-400 hover:bg-rose-500 px-4 py-1 rounded shadow-md w-full md:w-auto"
+                    >
+                      Download
+                    </Button>
+                  </Link>
+                )}
+              </div>
               }
             </li>
           ))

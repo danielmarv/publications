@@ -34,7 +34,7 @@ const mainNavItems = [
   },
   {
     title: 'Profiles',
-    href: '/profiles',
+    href: '/my-profile',
     icon: Users,
   },
 ];
