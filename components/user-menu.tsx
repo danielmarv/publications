@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { signOutUser } from "@/lib/actions/user.actions"
+import { signOutUserHome } from "@/lib/actions/user.actions"
 
 type Role = "guest" | "author" | "reviewer" | "approver" | "admin"
 
@@ -28,8 +28,11 @@ export function UserMenu({ user }: UserMenuProps) {
   const router = useRouter()
 
   const handleSignOut = async () => {
-    await signOutUser()
-    router.push("/sign-in")
+    await signOutUserHome()
+    router.push("/")
+  }
+  const handleDashboard = async () => {
+    await router.push("/dashboard")
   }
 
   const showDashboard = user.role !== "guest"
@@ -53,7 +56,10 @@ export function UserMenu({ user }: UserMenuProps) {
         </DropdownMenuItem>
         {showDashboard && (
           <DropdownMenuItem asChild>
-            <Link href="/dashboard">Dashboard</Link>
+            {/* <Link href="/dashboard">Dashboard</Link> */}
+            <Button variant="ghost" className="cursor-pointer" onClick={handleDashboard}>
+              Go to dashboard
+            </Button>
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />

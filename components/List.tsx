@@ -8,6 +8,7 @@ import { constructDownloadUrl, constructFileUrl } from '@/lib/utils';
 import mammoth from 'mammoth';
 import { TextAlignCenterIcon } from '@radix-ui/react-icons';
 import CiteModal from './CiteModal';
+import { getCurrentUser } from '@/lib/actions/user.actions';
 
 type Publication = {
   title: string;
@@ -40,15 +41,16 @@ type Publication = {
 const PublicationList = () => {
   const [publications, setpublications] = useState<Publication[]>([]);
   const [active, Setactive] = useState<string | null>(null);
-  // const download = constructDownloadUrl()
+  const [currentUser, setcurrentUser] = useState<any | null>(null);
   useEffect(() => {
     const handleGetPublications = async () => {
+      const currentUser = await getCurrentUser();
+      setcurrentUser(currentUser);
       try {
         const publication = await listPublications({
           searchText: '',
           limit: 10,
         });
-        console.log(publication)
         setpublications(publication);
       } catch (error) {
         console.error('Error fetching publications:', error);
@@ -73,7 +75,6 @@ const PublicationList = () => {
                       : pub
                   )
                 );
-                // console.log(result.value); 
               }
             }
           } catch (error) {
@@ -106,7 +107,7 @@ const PublicationList = () => {
               <div className="flex-1">
                 <h2 className="hover:underline sm:text-lg text-blue-600 text-base font-medium">
                   {pub.$id ? (
-                    <a href={pub.$id} target="_blank" rel="noopener noreferrer">
+                    <a href={`/publication/${pub.$id}`} target="_blank" rel="noopener noreferrer">
                       {pub.title}
                     </a>
                   ) : (
@@ -123,7 +124,7 @@ const PublicationList = () => {
                 </p>
 
                 {pub.description && (
-                  <Link href={`home/${pub.$id}`}>
+                  <Link href={`/publication/${pub.$id}`}>
                     <p className="hover:cursor-pointer mb-2 text-sm max-w-[800px] text-gray-700">
                       {pub.description} {pub.extractedText}
                     </p>
@@ -161,9 +162,9 @@ const PublicationList = () => {
                   }
                 </div>
               </div>
-
               {
                 <div className="mt-4 lg:mt-0 lg:ml-auto">
+                {currentUser ? (
                   <a
                     href={constructDownloadUrl(pub.fileId)}
                     target="_blank"
@@ -176,7 +177,17 @@ const PublicationList = () => {
                       Download
                     </Button>
                   </a>
-                </div>
+                ) : (
+                  <Link href="/sign-in">
+                    <Button
+                      variant="destructive"
+                      className="text-sm text-white bg-rose-400 hover:bg-rose-500 px-4 py-1 rounded shadow-md w-full md:w-auto"
+                    >
+                      Download
+                    </Button>
+                  </Link>
+                )}
+              </div>
               }
             </li>
           ))
